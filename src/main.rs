@@ -1,4 +1,4 @@
-use no_panic::no_panic;
+use std::io;
 use regex::{Error, Regex};
 
 fn main() {
