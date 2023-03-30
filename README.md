@@ -1,8 +1,8 @@
-# igc_parser
-A high-level parsing crate for IGC flight recorder files.
+# <span style="color:orange">IGC Parser</span>
+A <span style="color:orange"><strong>*high-level*</strong></span> parsing crate for IGC flight recorder files.
 <br /> With most focus on: 
-- Ease of use
-- No run-time asserts meaning that any errors will be through the ```Result``` type
-- Use of the ```#[no_panic]``` macro which means that the crate will never panic at runtime
-
-You should use this crate if you want to <ins>easily</ins>, <ins>quickly</ins> and <ins>safely</ins> parse igc files.
+- <span style="color:orange"><strong>*Easy*</strong></span> to use
+- <span style="color:orange"><strong>*No run-time asserts*</strong></span> meaning that any errors will be through the ```Result``` type
+- A  <span style="color:orange"><em><strong>*panic free*</strong></em></span> crate
+  
+You should use this crate if you want to <span style="color:orange"><strong>*easily, quickly*</strong></span> and <span style="color:orange"><strong>*safely*</strong></span> parse igc files.
