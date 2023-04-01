@@ -1,11 +1,11 @@
-use std::string::ParseError;
+use crate::records::error::IGCError;
+use crate::records::error::IGCError::RecordInitError;
+use crate::records::util::Parseable;
+use crate::records::fix::Fix;
 
 mod util;
-
-
-trait Recordable {
-    fn parse() -> Result<Self, ParseError>;
-}
+mod error;
+mod fix;
 
 enum Record {
     A(FlightRecorderID),
@@ -22,19 +22,26 @@ enum Record {
     L(Comment),
 }
 
-
-struct Fix {
-    pub timestamp: Time,
-    pub coordinates: Coordinate,
-    pub validity: bool,
-    pub pressure_alt: i16,
-    pub gps_alt: i16,
-    extension: String,
-}
-
-impl Recordable for Fix {
-    fn parse() -> Result<Self, ParseError> {
-        todo!()
+impl Parseable for Record {
+    fn parse(line: &str) -> Result<Self, IGCError> {
+        match line.chars().next() {
+            None => Err(RecordInitError(format!("\"{}\" could not get first character", line))),
+            Some(letter) => match letter {
+                'A' => unimplemented!(),
+                'B' => Ok(Record::B(Fix::parse(line)?)),
+                'C' => unimplemented!(),
+                'D' => unimplemented!(),
+                'E' => unimplemented!(),
+                'F' => unimplemented!(),
+                'G' => unimplemented!(),
+                'H' => unimplemented!(),
+                'I' => unimplemented!(),
+                'J' => unimplemented!(),
+                'K' => unimplemented!(),
+                'L' => unimplemented!(),
+                _ => Err(RecordInitError(format!("\"{}\" does not have a valid starting letter", line))),
+            }
+        }
     }
 }
 
