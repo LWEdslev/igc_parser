@@ -2,12 +2,15 @@ use crate::records::error::IGCError;
 use crate::records::error::IGCError::RecordInitError;
 use crate::records::util::Parseable;
 use crate::records::fix::Fix;
+use crate::records::flight_recorder_id::FlightRecorderID;
 
-mod util;
+pub mod util;
 mod error;
-mod fix;
+pub mod fix;
+mod flight_recorder_id;
 
-enum Record {
+#[derive(Debug, Clone)]
+pub enum Record {
     A(FlightRecorderID),
     B(Fix),
     C(TaskInfo),
@@ -25,9 +28,9 @@ enum Record {
 impl Parseable for Record {
     fn parse(line: &str) -> Result<Self, IGCError> {
         match line.chars().next() {
-            None => Err(RecordInitError(format!("\"{}\" could not get first character", line))),
+            None => Err(RecordInitError(format!("'{}' could not get first character", line))),
             Some(letter) => match letter {
-                'A' => unimplemented!(),
+                'A' => Ok(Record::A(FlightRecorderID::parse(line)?)),
                 'B' => Ok(Record::B(Fix::parse(line)?)),
                 'C' => unimplemented!(),
                 'D' => unimplemented!(),
@@ -39,30 +42,38 @@ impl Parseable for Record {
                 'J' => unimplemented!(),
                 'K' => unimplemented!(),
                 'L' => unimplemented!(),
-                _ => Err(RecordInitError(format!("\"{}\" does not have a valid starting letter", line))),
+                _ => Err(RecordInitError(format!("'{}' does not have a valid starting letter", line))),
             }
         }
     }
 }
 
-struct FlightRecorderID {}
+#[derive(Debug, Clone)]
+pub struct TaskInfo {}
 
-struct TaskInfo {}
+#[derive(Debug, Clone)]
+pub struct DiffGPS {}
 
-struct DiffGPS {}
+#[derive(Debug, Clone)]
+pub struct Event {}
 
-struct Event {}
+#[derive(Debug, Clone)]
+pub struct Satellite {}
 
-struct Satellite {}
+#[derive(Debug, Clone)]
+pub struct Security {}
 
-struct Security {}
+#[derive(Debug, Clone)]
+pub struct FileHeader {}
 
-struct FileHeader {}
+#[derive(Debug, Clone)]
+pub struct FixExtension {}
 
-struct FixExtension {}
+#[derive(Debug, Clone)]
+pub struct DataFixExtension {}
 
-struct DataFixExtension {}
+#[derive(Debug, Clone)]
+pub struct DataFix {}
 
-struct DataFix {}
-
-struct Comment {}
+#[derive(Debug, Clone)]
+pub struct Comment {}

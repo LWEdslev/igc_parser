@@ -1,20 +1,18 @@
-
-
 use crate::records::{error::IGCError, util::{Time, Coordinate, Parseable}};
 use crate::records::error::IGCError::{FixInitError};
 
-
+#[derive(Debug, Clone, PartialEq)]
 pub struct Fix {
     pub timestamp: Time,
     pub coordinates: Coordinate,
     pub pressure_alt: i16,
     pub gps_alt: Option<i16>, //option because of validity flag
-    extension: String,
+    pub extension: String,
 }
 
 impl Parseable for Fix {
     fn parse(line: &str) -> Result<Self, IGCError> {
-        if line.len() < 30 {
+        if line.chars().count() < 35 {
             return Err(FixInitError(format!("\"{}\" is too short to be parsed as a fix", line)))
         }
         if !line.starts_with("B") {

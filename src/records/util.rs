@@ -17,7 +17,7 @@ pub struct Time {
 
 impl Parseable for Time {
     fn parse(line: &str) -> Result<Self, IGCError> {
-        if line.len() != 6 {return Err(TimeInitError(format!("\"{}\" is not 6 characters long", line)))}
+        if line.chars().count() != 6 {return Err(TimeInitError(format!("\"{}\" is not 6 characters long", line)))}
         match (line[0..2].parse::<u8>(), line[2..4].parse::<u8>(), line[4..6].parse::<u8>()) {
             (Ok(h), Ok(m), Ok(s)) => Time::from_hms(h, m, s),
             _ => Err(TimeInitError(format!("unable to parse \"{}\" as numbers", line))),
@@ -62,8 +62,8 @@ pub struct Coordinate {
 //B094139 5152202N 00032723W A001140015000854106968064092190039002770100
 impl Parseable for Coordinate {
     fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
-        if line.len() != 17 {
-            return Err(CoordinateInitError(format!("\"{}\" is not the correct length for a coordinate", line)))
+        if line.chars().count() != 17 {
+            return Err(CoordinateInitError(format!("'{}' is not the correct length for a coordinate", line)))
         }
         let latitude = Latitude::parse(&line[0..8])?;
         let longitude = Longitude::parse(&line[8..17])?;
@@ -88,7 +88,7 @@ impl Parseable for Latitude {
         let is_north = match is_north {
             "N" => true,
             "S" => false,
-            _ => return Err(CoordinateInitError(format!("{} is not a valid latitude compass direction", is_north)))
+            _ => return Err(CoordinateInitError(format!("'{}' is not a valid latitude compass direction", is_north)))
         };
         Ok(Latitude {
             degrees,
@@ -110,13 +110,13 @@ impl Parseable for Longitude {
     fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         let (degrees, minutes) = match (line[0..3].parse::<u8>(), line[3..8].parse::<f32>()) {
             (Ok(degrees), Ok(minutes)) => (degrees, minutes / 1000.),
-            _ => return Err(CoordinateInitError(format!("unable to parse \"{}\"", line))),
+            _ => return Err(CoordinateInitError(format!("unable to parse '{}'", line))),
         };
 
         let is_east = match &line[8..9] {
             "E" => true,
             "W" => false,
-            _ => return Err(CoordinateInitError(format!("{} is not a valid longitude compass direction", &line[8..9])))
+            _ => return Err(CoordinateInitError(format!("'{}' is not a valid longitude compass direction", &line[8..9])))
         };
 
         Ok(Longitude {

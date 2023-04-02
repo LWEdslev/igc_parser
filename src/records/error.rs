@@ -5,4 +5,5 @@ pub enum IGCError {
     CoordInitError(String),
     RecordInitError(String),
     CoordinateInitError(String),
+    FRIDInitError(String),
 }
