@@ -54,6 +54,29 @@ impl Time {
 }
 
 #[derive(PartialEq, Clone, Debug)]
+pub struct Date {
+    pub(crate) d: u8,
+    pub(crate) m: u8,
+    pub(crate) y: u8,
+}
+
+impl Parseable for Date {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+        if line.len() != 6 { return Err(DateInitError(format!("'{}' is not the correct length for a date", line)))}
+        match (line[0..2].parse::<u8>(), line[2..4].parse::<u8>(), line[4..6].parse::<u8>()) {
+            (Ok(d), Ok(m), Ok(y)) => {
+                if (1u8..31).contains(&d) && (1u8..12).contains(&m) {
+                    Ok(Self {d, m, y})
+                } else {
+                    Err(DateInitError(format!("{}/{}-{} is not a valid date", d, m, y)))
+                }
+            }
+            _ => Err(DateInitError(format!("'{}' can not be parsed as a number", line)))
+        }
+    }
+}
+
+#[derive(PartialEq, Clone, Debug)]
 pub struct Coordinate {
     pub latitude: Latitude,
     pub longitude: Longitude,

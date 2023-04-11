@@ -3,11 +3,13 @@ use crate::records::error::IGCError::RecordInitError;
 use crate::records::util::Parseable;
 use crate::records::fix::Fix;
 use crate::records::flight_recorder_id::FlightRecorderID;
+use crate::records::task_info::TaskInfo;
 
 pub mod util;
 mod error;
 pub mod fix;
 mod flight_recorder_id;
+mod task_info;
 
 #[derive(Debug, Clone)]
 pub enum Record {
@@ -47,9 +49,6 @@ impl Parseable for Record {
         }
     }
 }
-
-#[derive(Debug, Clone)]
-pub struct TaskInfo {}
 
 #[derive(Debug, Clone)]
 pub struct DiffGPS {}
