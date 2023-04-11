@@ -34,7 +34,7 @@ impl Parseable for Record {
             Some(letter) => match letter {
                 'A' => Ok(Record::A(FlightRecorderID::parse(line)?)),
                 'B' => Ok(Record::B(Fix::parse(line)?)),
-                'C' => unimplemented!(),
+                'C' => Ok(Record::C(TaskInfo::parse(line)?)),
                 'D' => unimplemented!(),
                 'E' => unimplemented!(),
                 'F' => unimplemented!(),
