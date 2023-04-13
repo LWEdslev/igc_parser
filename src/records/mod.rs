@@ -2,6 +2,7 @@ use std::num::ParseIntError;
 use crate::records::diff_gps::DiffGPS;
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::{DiffGPSInitError, RecordInitError};
+use crate::records::event::Event;
 use crate::records::util::Parseable;
 use crate::records::fix::Fix;
 use crate::records::flight_recorder_id::FlightRecorderID;
@@ -13,6 +14,7 @@ pub mod fix;
 mod flight_recorder_id;
 mod task_info;
 mod diff_gps;
+mod event;
 
 #[derive(Debug, Clone)]
 pub enum Record {
@@ -53,10 +55,6 @@ impl Parseable for Record {
     }
 }
 
-
-
-#[derive(Debug, Clone)]
-pub struct Event {}
 
 #[derive(Debug, Clone)]
 pub struct Satellite {}

@@ -9,4 +9,5 @@ pub enum IGCError {
     FRIDInitError(String),
     TaskInfoInitError(String),
     DiffGPSInitError(String),
+    EventInitError(String),
 }
