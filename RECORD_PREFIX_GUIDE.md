@@ -1,0 +1,13 @@
+This file provides an overview of which records have which prefixes
+- A - Flight recorder ID
+- B - Fix
+- C - Task information record
+- D - Differental GPS
+- E - Event
+- F - Satellite Information
+- G - Security
+- H - File header
+- I - Fix extension
+- J - Data fix extension
+- K - Data fix
+- L - Comment
