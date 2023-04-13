@@ -1,5 +1,7 @@
+use std::num::ParseIntError;
+use crate::records::diff_gps::DiffGPS;
 use crate::records::error::IGCError;
-use crate::records::error::IGCError::RecordInitError;
+use crate::records::error::IGCError::{DiffGPSInitError, RecordInitError};
 use crate::records::util::Parseable;
 use crate::records::fix::Fix;
 use crate::records::flight_recorder_id::FlightRecorderID;
@@ -10,6 +12,7 @@ mod error;
 pub mod fix;
 mod flight_recorder_id;
 mod task_info;
+mod diff_gps;
 
 #[derive(Debug, Clone)]
 pub enum Record {
@@ -35,7 +38,7 @@ impl Parseable for Record {
                 'A' => Ok(Record::A(FlightRecorderID::parse(line)?)),
                 'B' => Ok(Record::B(Fix::parse(line)?)),
                 'C' => Ok(Record::C(TaskInfo::parse(line)?)),
-                'D' => unimplemented!(),
+                'D' => Ok(Record::D(DiffGPS::parse(line)?)),
                 'E' => unimplemented!(),
                 'F' => unimplemented!(),
                 'G' => unimplemented!(),
@@ -50,8 +53,7 @@ impl Parseable for Record {
     }
 }
 
-#[derive(Debug, Clone)]
-pub struct DiffGPS {}
+
 
 #[derive(Debug, Clone)]
 pub struct Event {}
@@ -76,3 +78,4 @@ pub struct DataFix {}
 
 #[derive(Debug, Clone)]
 pub struct Comment {}
+

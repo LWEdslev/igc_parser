@@ -8,4 +8,5 @@ pub enum IGCError {
     CoordinateInitError(String),
     FRIDInitError(String),
     TaskInfoInitError(String),
+    DiffGPSInitError(String),
 }
