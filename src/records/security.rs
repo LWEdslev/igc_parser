@@ -20,6 +20,7 @@ impl Parseable for Security {
 mod tests {
     use super::*;
 
+    #[test]
     fn security_parsed_correctly() {
         let sec = Security::parse("GREJNGJERJKNJKRE31895478537H43982FJN9248F942389T433T").unwrap();
         assert_eq!(sec.security_code, "REJNGJERJKNJKRE31895478537H43982FJN9248F942389T433T".to_string())
