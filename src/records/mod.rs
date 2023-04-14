@@ -34,8 +34,8 @@ pub enum Record {
     F(Satellite),
     G(Security),
     H(FileHeader),
-    I(FixExtension),
-    J(DataFixExtension),
+    I(Extension),
+    J(Extension),
     K(DataFix),
     L(Comment),
 }
@@ -53,8 +53,8 @@ impl Parseable for Record {
                 'F' => Ok(Record::F(Satellite::parse(line)?)),
                 'G' => Ok(Record::G(Security::parse(line)?)),
                 'H' => Ok(Record::H(FileHeader::parse(line)?)),
-                'I' => Ok(Record::I(FixExtension::parse(line)?)),
-                'J' => unimplemented!(),
+                'I' => Ok(Record::I(Extension::parse(line)?)),
+                'J' => Ok(Record::J(Extension::parse(line)?)),
                 'K' => unimplemented!(),
                 'L' => unimplemented!(),
                 _ => Err(RecordInitError(format!("'{}' does not have a valid starting letter", line))),
@@ -64,13 +64,22 @@ impl Parseable for Record {
 }
 
 #[derive(Debug, Clone)]
-pub struct FixExtension {
+pub enum ExtensionType {I, J}
+
+#[derive(Debug, Clone)]
+pub struct Extension {
+    pub extension_type: ExtensionType,
     pub number_of_extensions: u8,
     pub extensions: Vec<(u8, u8, String)>
 }
 
-impl Parseable for FixExtension {
+impl Parseable for Extension {
     fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+        let extension_type = match &line[0..1] {
+            "I" => {ExtensionType::I},
+            "J" => {ExtensionType::J},
+            _ => return Err(FixExtensionInitError(format!("'{line}' does not start with a valid prefix for an extension")))
+        }
         if line.len() < 3 { return Err(FixExtensionInitError(format!("'{line}' is too short to be parsed as a fix extension")))}
         let number_of_extensions = match line[1..3].parse::<u8>() {
             Ok(number_of_extensions) => number_of_extensions,
@@ -95,12 +104,14 @@ impl Parseable for FixExtension {
             }
         }).collect::<Vec<(u8, u8, String)>>();
 
-        Ok(Self {number_of_extensions, extensions})
+        Ok(Self {extension_type, number_of_extensions, extensions})
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct DataFixExtension {}
+pub struct DataFixExtension {
+
+}
 
 #[derive(Debug, Clone)]
 pub struct DataFix {}
