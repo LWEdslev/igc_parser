@@ -11,4 +11,5 @@ pub enum IGCError {
     DiffGPSInitError(String),
     EventInitError(String),
     SatelliteInitError(String),
+    SecurityInitError(String),
 }
