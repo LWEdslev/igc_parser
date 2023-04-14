@@ -2,10 +2,6 @@ use crate::records::error::IGCError;
 use crate::records::error::IGCError::TaskInfoInitError;
 use crate::records::util::{Coordinate, Date, Parseable, Time};
 
-
-//CDDMMYYHHMMSSFDFMFYIIII TT TEXT STRING CR LF
-//CDDMMMMMNDDDMMMMME TAKEOFF TEXT STRING CR LF //C0000000N00000000E
-
 #[derive(Debug, Clone)]
 pub enum TaskInfo {
     TaskPoint(TaskPoint),
@@ -15,7 +11,7 @@ pub enum TaskInfo {
 impl Parseable for TaskInfo {
     fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 18 { return Err(TaskInfoInitError(format!("'{}' is too short to be parsed as kind of task info record", line))) }
-        if line[1..].chars().all(|c| c.is_numeric()) {
+        if line[1..17].chars().all(|c| c.is_numeric()) {
             Ok(TaskInfo::DeclarationTime(DeclarationTime::parse(line)?))
         } else {
             Ok(TaskInfo::TaskPoint(TaskPoint::parse(line)?))

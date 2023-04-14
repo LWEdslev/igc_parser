@@ -35,7 +35,7 @@ impl Parseable for FileHeader {
             },
             "HFFXA" => {
                 if line.len() != 8 { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header fix accuracy"))) };
-                let accuracy = line[6..9].parse::<u16>();
+                let accuracy = line[6..8].parse::<u16>();
                 match accuracy {
                     Ok(accuracy) => Ok(FileHeader::FixAccuracy(accuracy)),
                     Err(_) => Err(FileHeaderInitError(format!("'{line}' can not be parsed as a fix accuracy number"))),
