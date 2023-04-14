@@ -13,4 +13,5 @@ pub enum IGCError {
     SatelliteInitError(String),
     SecurityInitError(String),
     FileHeaderInitError(String),
+    FixExtensionInitError(String),
 }
