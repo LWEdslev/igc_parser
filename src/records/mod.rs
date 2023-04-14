@@ -5,6 +5,7 @@ use crate::records::diff_gps::DiffGPS;
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::{DiffGPSInitError, RecordInitError, SatelliteInitError, SecurityInitError};
 use crate::records::event::Event;
+use crate::records::file_header::FileHeader;
 use crate::records::util::{Parseable, Time};
 use crate::records::fix::Fix;
 use crate::records::flight_recorder_id::FlightRecorderID;
@@ -21,6 +22,7 @@ mod diff_gps;
 mod event;
 mod satellite;
 mod security;
+mod file_header;
 
 #[derive(Debug, Clone)]
 pub enum Record {
@@ -50,7 +52,7 @@ impl Parseable for Record {
                 'E' => Ok(Record::E(Event::parse(line)?)),
                 'F' => Ok(Record::F(Satellite::parse(line)?)),
                 'G' => Ok(Record::G(Security::parse(line)?)),
-                'H' => unimplemented!(),
+                'H' => Ok(Record::H(FileHeader::parse(line)?)),
                 'I' => unimplemented!(),
                 'J' => unimplemented!(),
                 'K' => unimplemented!(),
@@ -60,10 +62,6 @@ impl Parseable for Record {
         }
     }
 }
-
-
-#[derive(Debug, Clone)]
-pub struct FileHeader {}
 
 #[derive(Debug, Clone)]
 pub struct FixExtension {}
