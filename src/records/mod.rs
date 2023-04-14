@@ -1,11 +1,14 @@
+use std::error::Error;
 use std::num::ParseIntError;
+use regex::internal::Char;
 use crate::records::diff_gps::DiffGPS;
 use crate::records::error::IGCError;
-use crate::records::error::IGCError::{DiffGPSInitError, RecordInitError};
+use crate::records::error::IGCError::{DiffGPSInitError, RecordInitError, SatelliteInitError};
 use crate::records::event::Event;
-use crate::records::util::Parseable;
+use crate::records::util::{Parseable, Time};
 use crate::records::fix::Fix;
 use crate::records::flight_recorder_id::FlightRecorderID;
+use crate::records::satellite::Satellite;
 use crate::records::task_info::TaskInfo;
 
 pub mod util;
@@ -15,6 +18,7 @@ mod flight_recorder_id;
 mod task_info;
 mod diff_gps;
 mod event;
+mod satellite;
 
 #[derive(Debug, Clone)]
 pub enum Record {
@@ -41,8 +45,8 @@ impl Parseable for Record {
                 'B' => Ok(Record::B(Fix::parse(line)?)),
                 'C' => Ok(Record::C(TaskInfo::parse(line)?)),
                 'D' => Ok(Record::D(DiffGPS::parse(line)?)),
-                'E' => unimplemented!(),
-                'F' => unimplemented!(),
+                'E' => Ok(Record::E(Event::parse(line)?)),
+                'F' => Ok(Record::F(Satellite::parse(line)?)),
                 'G' => unimplemented!(),
                 'H' => unimplemented!(),
                 'I' => unimplemented!(),
@@ -56,8 +60,6 @@ impl Parseable for Record {
 }
 
 
-#[derive(Debug, Clone)]
-pub struct Satellite {}
 
 #[derive(Debug, Clone)]
 pub struct Security {}
