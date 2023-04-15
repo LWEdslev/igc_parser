@@ -17,7 +17,7 @@ impl Fix {
         if line.chars().count() < 35 {
             return Err(FixInitError(format!("\"{}\" is too short to be parsed as a fix", line)))
         }
-        if !line.starts_with("B") {
+        if !line.starts_with('B') {
             return Err(FixInitError(format!("\"{}\" does not start with B and can therefore not be parsed as a B record (Fix)", line)))
         }
         let timestamp = Time::parse(&line[1..7])?;

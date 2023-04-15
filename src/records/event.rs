@@ -22,7 +22,7 @@ impl Event {
 
 impl Event {
     pub fn is_pev(&self) -> bool {
-        self.event_type == "PEV".to_string()
+        self.event_type == *"PEV"
     }
 }
 

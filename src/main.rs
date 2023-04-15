@@ -1,4 +1,4 @@
-use regex::{Regex};
+
 use igc_parser::records;
 
 fn main() {

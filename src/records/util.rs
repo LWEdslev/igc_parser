@@ -1,4 +1,4 @@
-use std::num::ParseIntError;
+
 use crate::error::IGCError;
 use crate::error::IGCError::*;
 
@@ -43,7 +43,8 @@ impl  Time {
 
     pub fn add_hours(&mut self, h: u8) -> Result<(), IGCError> {
         if self.h + h > 23 { return Err(TimeInitError(format!("tried to add {} hours with {}", self.h, h)))}
-        Ok(self.h += h)
+        self.h += h;
+        Ok(())
     }
 }
 
