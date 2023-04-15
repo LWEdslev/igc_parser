@@ -1,6 +1,6 @@
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::SatelliteInitError;
-use crate::records::util::{Parseable, Time};
+use crate::records::util::{Time};
 
 #[derive(Debug, Clone)]
 pub struct Satellite {
@@ -8,8 +8,8 @@ pub struct Satellite {
     pub satellite_ids: Vec<String>,
 }
 
-impl Parseable for Satellite {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl Satellite {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 7 { return Err(SatelliteInitError(format!("'{line}' is too short to be parsed as a satellite record"))) }
         let time = Time::parse(&line[1..7])?;
         let satellite_ids = line[7..]

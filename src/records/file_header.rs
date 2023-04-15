@@ -1,6 +1,6 @@
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::FileHeaderInitError;
-use crate::records::util::{Date, Parseable};
+use crate::records::util::{Date};
 
 #[derive(Debug, Clone)]
 pub enum FileHeader {
@@ -25,8 +25,8 @@ fn get_file_header_with_string_content<'a>(line: &'a str, header_name: &str) -> 
     Ok(&line[header_name.len()..])
 }
 
-impl Parseable for FileHeader {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl FileHeader {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         match &line[0..5] {
             "HFDTE" => {
                 if line.len() != 11 { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header date"))) };

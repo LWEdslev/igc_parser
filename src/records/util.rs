@@ -2,10 +2,6 @@ use std::num::ParseIntError;
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::*;
 
-pub trait Parseable {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized;
-}
-
 type Seconds = u32;
 
 #[derive(PartialEq, Clone, Debug)]
@@ -15,17 +11,15 @@ pub struct Time {
     s: u8,
 }
 
-impl Parseable for Time {
-    fn parse(line: &str) -> Result<Self, IGCError> {
+impl  Time {
+    pub fn parse(line: &str) -> Result<Self, IGCError> {
         if line.chars().count() != 6 {return Err(TimeInitError(format!("\"{}\" is not 6 characters long", line)))}
         match (line[0..2].parse::<u8>(), line[2..4].parse::<u8>(), line[4..6].parse::<u8>()) {
             (Ok(h), Ok(m), Ok(s)) => Time::from_hms(h, m, s),
             _ => Err(TimeInitError(format!("unable to parse \"{}\" as numbers", line))),
         }
     }
-}
 
-impl Time {
     pub fn from_hms(h: u8, m: u8, s: u8) -> Result<Self, IGCError> {
         if h > 23 { return Err(TimeInitError(format!("{} hours are too many, there must be less than 24 hours", h)))}
         if m > 59 { return Err(TimeInitError(format!("{} minutes are too many, there must be less 60 minutes", m)))}
@@ -55,13 +49,13 @@ impl Time {
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct Date {
-    pub(crate) d: u8,
-    pub(crate) m: u8,
-    pub(crate) y: u8,
+    pub d: u8,
+    pub m: u8,
+    pub y: u8,
 }
 
-impl Parseable for Date {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl Date {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() != 6 { return Err(DateInitError(format!("'{}' is not the correct length for a date", line)))}
         match (line[0..2].parse::<u8>(), line[2..4].parse::<u8>(), line[4..6].parse::<u8>()) {
             (Ok(d), Ok(m), Ok(y)) => {
@@ -81,10 +75,9 @@ pub struct Coordinate {
     pub latitude: Latitude,
     pub longitude: Longitude,
 }
-//                 012345678
-//B094139 5152202N 00032723W A001140015000854106968064092190039002770100
-impl Parseable for Coordinate {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+
+impl Coordinate {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.chars().count() != 17 {
             return Err(CoordinateInitError(format!("'{}' is not the correct length for a coordinate", line)))
         }
@@ -101,8 +94,8 @@ pub struct Latitude {
     pub is_north: bool,
 }
 
-impl Parseable for Latitude {
-    fn parse(line: &str) -> Result<Self, IGCError> {
+impl Latitude {
+    pub fn parse(line: &str) -> Result<Self, IGCError> {
         let (degrees, minutes, is_north) = (&line[0..2], &line[2..7], &line[7..8]);
         let (degrees, minutes) = match (degrees.parse::<u8>(), minutes.parse::<f32>()) {
             (Ok(degrees), Ok(minutes)) => (degrees, minutes / 1000.),
@@ -127,10 +120,9 @@ pub struct Longitude {
     pub minutes: f32,
     pub is_east: bool,
 }
-//  012 34567 8
-//  000 32723 W
-impl Parseable for Longitude {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+
+impl Longitude {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         let (degrees, minutes) = match (line[0..3].parse::<u8>(), line[3..8].parse::<f32>()) {
             (Ok(degrees), Ok(minutes)) => (degrees, minutes / 1000.),
             _ => return Err(CoordinateInitError(format!("unable to parse '{}'", line))),

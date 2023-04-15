@@ -1,6 +1,5 @@
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::DiffGPSInitError;
-use crate::records::util::Parseable;
 
 #[derive(Debug, Clone)]
 pub struct DiffGPS {
@@ -14,8 +13,8 @@ pub enum DiffGPSQualifier {
     DGPS,
 }
 
-impl Parseable for DiffGPS {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl DiffGPS {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() != 6 {return Err(DiffGPSInitError(format!("'{line} is not long enough to be parsed as a differential GPS record'")))}
         let qualifier = match line[1..2].parse::<u16>() {
             Ok(qualifier) => qualifier,

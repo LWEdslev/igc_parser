@@ -1,12 +1,10 @@
-use std::error::Error;
 use std::num::ParseIntError;
-use regex::internal::Char;
 use crate::records::diff_gps::DiffGPS;
 use crate::records::error::IGCError;
 use crate::records::error::IGCError::{CommentInitError, DataFixInitError, DiffGPSInitError, ExtensionInitError, RecordInitError, SatelliteInitError, SecurityInitError};
 use crate::records::event::Event;
 use crate::records::file_header::FileHeader;
-use crate::records::util::{Parseable, Time};
+use crate::records::util::Time;
 use crate::records::fix::Fix;
 use crate::records::flight_recorder_id::FlightRecorderID;
 use crate::records::satellite::Satellite;
@@ -14,15 +12,15 @@ use crate::records::security::Security;
 use crate::records::task_info::TaskInfo;
 
 pub mod util;
-mod error;
+pub mod error;
 pub mod fix;
-mod flight_recorder_id;
-mod task_info;
-mod diff_gps;
-mod event;
-mod satellite;
-mod security;
-mod file_header;
+pub mod flight_recorder_id;
+pub mod task_info;
+pub mod diff_gps;
+pub mod event;
+pub mod satellite;
+pub mod security;
+pub mod file_header;
 
 #[derive(Debug, Clone)]
 pub enum Record {
@@ -40,8 +38,8 @@ pub enum Record {
     L(Comment),
 }
 
-impl Parseable for Record {
-    fn parse(line: &str) -> Result<Self, IGCError> {
+impl Record {
+    pub fn parse(line: &str) -> Result<Self, IGCError> {
         match line.chars().next() {
             None => Err(RecordInitError(format!("'{}' could not get first character", line))),
             Some(letter) => match letter {
@@ -73,8 +71,8 @@ pub struct Extension {
     pub extensions: Vec<(u8, u8, String)>
 }
 
-impl Parseable for Extension {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl Extension {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         let extension_type = match &line[0..1] {
             "I" => {ExtensionType::I},
             "J" => {ExtensionType::J},
@@ -114,8 +112,8 @@ pub struct DataFix {
     pub content: String,
 }
 
-impl Parseable for DataFix {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl DataFix {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 7 { return Err(DataFixInitError(format!("'{line}' is too short to be parsed as a data fix"))) };
         let time = Time::parse(&line[1..7])?;
         let content = line[7..].to_string();
@@ -128,8 +126,8 @@ pub struct Comment {
     pub content: String
 }
 
-impl Parseable for Comment {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+impl Comment {
+    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 1 { return Err(CommentInitError(format!("'{line}' is too short to be a comment")))}
         let content = line[1..].to_string();
         Ok(Self {content})
