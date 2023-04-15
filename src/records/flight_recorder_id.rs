@@ -10,7 +10,7 @@ pub struct FlightRecorderID {
 }
 
 impl FlightRecorderID {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.chars().count() < 7 { return Err(FRIDInitError(format!("'{}' is too short for an A record", line)))};
         let manufacturer = line[1..4].to_string();
         let id = line[4..7].to_string();

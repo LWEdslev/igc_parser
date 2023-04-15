@@ -26,7 +26,7 @@ fn get_file_header_with_string_content<'a>(line: &'a str, header_name: &str) -> 
 }
 
 impl FileHeader {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         match &line[0..5] {
             "HFDTE" => {
                 if line.len() != 11 { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header date"))) };

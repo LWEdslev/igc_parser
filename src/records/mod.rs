@@ -1,15 +1,11 @@
 use std::num::ParseIntError;
 use crate::records::diff_gps::DiffGPS;
 use crate::records::error::IGCError;
-use crate::records::error::IGCError::{CommentInitError, DataFixInitError, DiffGPSInitError, ExtensionInitError, RecordInitError, SatelliteInitError, SecurityInitError};
-use crate::records::event::Event;
-use crate::records::file_header::FileHeader;
-use crate::records::util::Time;
-use crate::records::fix::Fix;
-use crate::records::flight_recorder_id::FlightRecorderID;
-use crate::records::satellite::Satellite;
-use crate::records::security::Security;
-use crate::records::task_info::TaskInfo;
+use crate::records::error::IGCError::{CommentInitError, DataFixInitError, ExtensionInitError, RecordInitError};
+use crate::records::{event::Event, file_header::FileHeader, util::Time, fix::Fix, flight_recorder_id::FlightRecorderID, satellite::Satellite, security::Security, task_info::TaskInfo};
+use crate::records::comment::Comment;
+use crate::records::data_fix::DataFix;
+use crate::records::extension::Extension;
 
 pub mod util;
 pub mod error;
@@ -21,7 +17,12 @@ pub mod event;
 pub mod satellite;
 pub mod security;
 pub mod file_header;
+pub mod comment;
+pub mod extension;
+pub mod data_fix;
 
+/// Record enum for getting different record types
+/// Each element contains a struct/enum that is the result of parsing a specific line
 #[derive(Debug, Clone)]
 pub enum Record {
     A(FlightRecorderID),
@@ -39,6 +40,20 @@ pub enum Record {
 }
 
 impl Record {
+    /// Returns an Ok(Record) corresponding to the line that was parsed, returns Err(IGCError) if something went wrong
+    /// Should never panic!
+    /// # Arguments
+    ///
+    ///  * `line` - A string slice that holds the line to be parsed
+    /// # Examples
+    /// ```
+    /// use igc_parser::records::Record;
+    /// let fix = match Record::parse("B1602405407121N00249342WA002800042120509950") {
+    ///     Ok(Record::B(fix)) => fix,
+    ///     _ => panic!("invalid valid string slice"),
+    /// };
+    /// println!("Succesfully parsed: {:?}", fix)
+    /// ```
     pub fn parse(line: &str) -> Result<Self, IGCError> {
         match line.chars().next() {
             None => Err(RecordInitError(format!("'{}' could not get first character", line))),
@@ -60,80 +75,6 @@ impl Record {
         }
     }
 }
-
-#[derive(Debug, Clone)]
-pub enum ExtensionType {I, J}
-
-#[derive(Debug, Clone)]
-pub struct Extension {
-    pub extension_type: ExtensionType,
-    pub number_of_extensions: u8,
-    pub extensions: Vec<(u8, u8, String)>
-}
-
-impl Extension {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
-        let extension_type = match &line[0..1] {
-            "I" => {ExtensionType::I},
-            "J" => {ExtensionType::J},
-            _ => return Err(ExtensionInitError(format!("'{line}' does not start with a valid prefix for an extension")))
-        };
-        if line.len() < 3 { return Err(ExtensionInitError(format!("'{line}' is too short to be parsed as a fix extension")))}
-        let number_of_extensions = match line[1..3].parse::<u8>() {
-            Ok(number_of_extensions) => number_of_extensions,
-            Err(_) => return Err(ExtensionInitError(format!("'{line}' does not have a valid number of extensions field")))
-        };
-        if line.len() != (3 + number_of_extensions * 7) as usize { return Err(ExtensionInitError(format!("'{line}' does not have the correct length according to number of extensions"))) }
-        let extensions = line[3..]
-            .chars()
-            .collect::<Vec<char>>()
-            .chunks(7)
-            .map(|c|
-                (c[0..2].iter().collect::<String>().parse::<u8>(),
-                 c[2..4].iter().collect::<String>().parse::<u8>(),
-                 c[4..7].iter().collect::<String>())).collect::<Vec<(Result<u8, ParseIntError>, Result<u8, ParseIntError>, String)>>();
-        if !extensions.iter().all(|(start, end, _)| start.is_ok() && end.is_ok()) {
-            return Err(ExtensionInitError(format!("'{line}' has invalid start/end characters")))
-        }
-        let extensions = extensions.into_iter().map(|(start, end, s)| {
-            match (start, end) {
-                (Ok(start), Ok(end)) => (start, end, s),
-                _ => unreachable!(),
-            }
-        }).collect::<Vec<(u8, u8, String)>>();
-
-        Ok(Self {extension_type, number_of_extensions, extensions})
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct DataFix {
-    pub time: Time,
-    pub content: String,
-}
-
-impl DataFix {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
-        if line.len() < 7 { return Err(DataFixInitError(format!("'{line}' is too short to be parsed as a data fix"))) };
-        let time = Time::parse(&line[1..7])?;
-        let content = line[7..].to_string();
-        Ok(Self {time, content})
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct Comment {
-    pub content: String
-}
-
-impl Comment {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
-        if line.len() < 1 { return Err(CommentInitError(format!("'{line}' is too short to be a comment")))}
-        let content = line[1..].to_string();
-        Ok(Self {content})
-    }
-}
-
 
 #[cfg(test)]
 

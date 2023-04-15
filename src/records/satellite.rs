@@ -9,7 +9,7 @@ pub struct Satellite {
 }
 
 impl Satellite {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 7 { return Err(SatelliteInitError(format!("'{line}' is too short to be parsed as a satellite record"))) }
         let time = Time::parse(&line[1..7])?;
         let satellite_ids = line[7..]

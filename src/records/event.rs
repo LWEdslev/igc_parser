@@ -5,13 +5,13 @@ use crate::records::util::Time;
 
 #[derive(Debug, Clone)]
 pub struct Event {
-    time: Time,
-    event_type: String,
-    extension: String,
+    pub time: Time,
+    pub event_type: String,
+    pub extension: String,
 }
 
 impl Event {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 10 { return Err(EventInitError(format!("'{line}' is too short to be parsed as an event record"))) };
         let time = Time::parse(&line[1..7])?;
         let event_type = line[7..10].to_string();
@@ -21,7 +21,7 @@ impl Event {
 }
 
 impl Event {
-    fn is_pev(&self) -> bool {
+    pub fn is_pev(&self) -> bool {
         self.event_type == "PEV".to_string()
     }
 }

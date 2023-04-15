@@ -14,7 +14,7 @@ pub enum DiffGPSQualifier {
 }
 
 impl DiffGPS {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() != 6 {return Err(DiffGPSInitError(format!("'{line} is not long enough to be parsed as a differential GPS record'")))}
         let qualifier = match line[1..2].parse::<u16>() {
             Ok(qualifier) => qualifier,

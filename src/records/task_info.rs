@@ -43,7 +43,7 @@ pub struct DeclarationTime {
 }
 
 impl DeclarationTime {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 23 { return Err(TaskInfoInitError(format!("'{}' is too short to be a declaration time record", line))) }
         let date = Date::parse(&line[1..7])?;
         let time = Time::parse(&line[7..13])?;
@@ -53,7 +53,7 @@ impl DeclarationTime {
 }
 
 impl DeclarationTime {
-    pub fn get_extra(&self) -> String {
+    fn get_extra(&self) -> String {
         self.extra.clone()
     }
 }

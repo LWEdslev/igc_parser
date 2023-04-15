@@ -11,7 +11,7 @@ pub struct Fix {
 }
 
 impl Fix {
-    pub fn parse(line: &str) -> Result<Self, IGCError> {
+    fn parse(line: &str) -> Result<Self, IGCError> {
         if line.chars().count() < 35 {
             return Err(FixInitError(format!("\"{}\" is too short to be parsed as a fix", line)))
         }
