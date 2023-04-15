@@ -1,5 +1,5 @@
-use crate::records::error::IGCError;
-use crate::records::error::IGCError::TaskInfoInitError;
+use crate::error::IGCError;
+use crate::error::IGCError::TaskInfoInitError;
 use crate::records::util::{Coordinate, Date, Time};
 
 #[derive(Debug, Clone)]

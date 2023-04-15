@@ -1,5 +1,5 @@
-use crate::records::error::IGCError;
-use crate::records::error::IGCError::SecurityInitError;
+use crate::error::IGCError;
+use crate::error::IGCError::SecurityInitError;
 
 #[derive(Debug, Clone)]
 pub struct Security {
@@ -7,7 +7,7 @@ pub struct Security {
 }
 
 impl Security {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         if line.len() < 2 { return Err(SecurityInitError(format!("'{line}' is too short to be a security tag")))};
         let security_code = line[1..].to_string();
         Ok(Self {security_code})

@@ -1,6 +1,6 @@
 use std::num::ParseIntError;
-use crate::records::error::IGCError;
-use crate::records::error::IGCError::ExtensionInitError;
+use crate::error::IGCError;
+use crate::error::IGCError::ExtensionInitError;
 
 #[derive(Debug, Clone)]
 pub enum ExtensionType {I, J}
@@ -13,7 +13,7 @@ pub struct Extension {
 }
 
 impl Extension {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
         let extension_type = match &line[0..1] {
             "I" => {ExtensionType::I},
             "J" => {ExtensionType::J},

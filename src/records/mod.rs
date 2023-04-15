@@ -1,14 +1,13 @@
 use std::num::ParseIntError;
 use crate::records::diff_gps::DiffGPS;
-use crate::records::error::IGCError;
-use crate::records::error::IGCError::{CommentInitError, DataFixInitError, ExtensionInitError, RecordInitError};
-use crate::records::{event::Event, file_header::FileHeader, util::Time, fix::Fix, flight_recorder_id::FlightRecorderID, satellite::Satellite, security::Security, task_info::TaskInfo};
+use crate::error::IGCError;
+use crate::error::IGCError::{CommentInitError, DataFixInitError, ExtensionInitError, RecordInitError};
+use crate::records::{event::Event, file_header::FileHeader, fix::Fix, flight_recorder_id::FlightRecorderID, satellite::Satellite, security::Security, task_info::TaskInfo, util::Time};
 use crate::records::comment::Comment;
 use crate::records::data_fix::DataFix;
 use crate::records::extension::Extension;
 
 pub mod util;
-pub mod error;
 pub mod fix;
 pub mod flight_recorder_id;
 pub mod task_info;

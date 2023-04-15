@@ -1,6 +1,6 @@
 use std::num::ParseIntError;
-use crate::records::error::IGCError;
-use crate::records::error::IGCError::*;
+use crate::error::IGCError;
+use crate::error::IGCError::*;
 
 type Seconds = u32;
 

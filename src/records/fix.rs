@@ -1,7 +1,9 @@
-use crate::records::{error::IGCError, util::{Time, Coordinate}};
-use crate::records::error::IGCError::{FixInitError};
+use crate::error::IGCError;
+use crate::records::{util::{Coordinate, Time}};
+use crate::error::IGCError::FixInitError;
 
 #[derive(Debug, Clone, PartialEq)]
+/// Fix
 pub struct Fix {
     pub timestamp: Time,
     pub coordinates: Coordinate,
@@ -11,7 +13,7 @@ pub struct Fix {
 }
 
 impl Fix {
-    fn parse(line: &str) -> Result<Self, IGCError> {
+    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> {
         if line.chars().count() < 35 {
             return Err(FixInitError(format!("\"{}\" is too short to be parsed as a fix", line)))
         }

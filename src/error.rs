@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum IGCError {
     TimeInitError(String),
     DateInitError(String),
@@ -16,4 +16,5 @@ pub enum IGCError {
     ExtensionInitError(String),
     CommentInitError(String),
     DataFixInitError(String),
+    IGCFileInitError(String)
 }
