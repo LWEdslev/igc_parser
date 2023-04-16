@@ -53,7 +53,7 @@ impl DeclarationTime {
 }
 
 impl DeclarationTime {
-    fn get_extra(&self) -> String {
+    pub fn get_extra(&self) -> String {
         self.extra.clone()
     }
 }
