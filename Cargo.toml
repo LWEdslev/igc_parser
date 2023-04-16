@@ -2,6 +2,5 @@
 name = "igc_parser"
 version = "0.1.0"
 edition = "2021"
-
-[dependencies]
-regex = "1.7.3"
+description = "A high-level parsing/deserializing crate for IGC flight recorder files"
+repository = "https://github.com/LWEdslev/igc_parser"

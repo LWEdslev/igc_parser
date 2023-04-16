@@ -15,6 +15,8 @@ use crate::records::task_info::TaskInfo;
 
 #[derive(Clone)]
 /// For parsing the entire file at once, then it gives access to vectors holding the result of the parsing
+///
+///
 /// Not very efficient if you only need to parse one specific kind of record but still fast enough for almost all use cases
 /// # examples
 /// ```

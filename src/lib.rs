@@ -6,6 +6,24 @@
 //! - A  <span style="color:orange"><em><strong>*panic free*</strong></em></span> crate
 //!
 //! You should use this crate if you want to <span style="color:orange"><strong>*easily, quickly*</strong></span> and <span style="color:orange"><strong>*safely*</strong></span> parse igc files.
+//!
+//! Look in `records` to see the different kind of records that can be parsed
+//!
+//! # examples
+//! This is if you want all fixes that have parsed correctly. A similar approach is used for the other records.
+//! ```
+//! use std::fs;
+//! use igc_parser::records::{fix::Fix, Record};
+//! let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
+//! let valid_fixes = file.lines().filter_map(|line| {
+//!     match Record::parse(line) {
+//!         Ok(Record::B(fix)) => Some(fix),
+//!         _ => None,
+//!         }
+//!     }).collect::<Vec<Fix>>();
+//! println!("{}", valid_fixes.len())
+//! ```
+
 
 /// All different type of IGC records
 pub mod records;
