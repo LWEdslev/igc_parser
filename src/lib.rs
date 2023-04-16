@@ -9,5 +9,7 @@
 
 /// All different type of IGC records
 pub mod records;
+/// For parsing entire file at once
 pub mod igc_file;
+/// Parsing errors
 pub mod error;

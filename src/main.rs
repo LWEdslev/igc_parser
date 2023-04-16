@@ -1,7 +1,15 @@
-
+use igc_parser::error::IGCError;
 use igc_parser::records;
 
 fn main() {
-    let b = "B0941395152202N00032723WA0011400150";
-    println!("{:?}", records::Record::parse(b).unwrap());
+    use std::fs;
+    use igc_parser::igc_file::IGCFile;
+    use igc_parser::records::fix::Fix;
+    let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
+    let igc_file = IGCFile::parse(&file).unwrap();
+    let valid_fixes = igc_file.get_fixes().clone().into_iter().filter_map(|fix| match fix {
+        Ok(fix) => Some(fix),
+        Err(_) => None,
+    }).collect::<Vec<Fix>>();
+    println!("{}", valid_fixes.len())
 }
