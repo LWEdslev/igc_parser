@@ -6,10 +6,13 @@ A <span style="color:orange"><strong>*high-level*</strong></span> parsing crate 
 - A  <span style="color:orange"><em><strong>*panic free*</strong></em></span> crate
   
 You should use this crate if you want to <span style="color:orange"><strong>*easily, quickly*</strong></span> and <span style="color:orange"><strong>*safely*</strong></span> parse igc files.
-### Example
+
+
+For additional information on the records use https://xp-soaring.github.io/igc_file_format/igc_format_2008.html
+
+### Example 1
+Parsing all fixes (B records)
 ```
-use std::fs;
-use igc_parser::records::{fix::Fix, Record};
 let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
 let valid_fixes = file.lines().filter_map(|line| {
     match Record::parse(line) {
@@ -17,5 +20,28 @@ let valid_fixes = file.lines().filter_map(|line| {
         _ => None,
         }
     }).collect::<Vec<Fix>>();
+println!("{}", valid_fixes.len())
+```
+
+### Example 2
+Parsing a single record (L record aka comment)
+```
+let comment = match Record::parse("LCOMMENTYCOMMENT").unwrap() {
+        Record::L(comment) => comment,
+        _ => panic!("This was not a comment")
+    };
+println!("{}", comment.content);
+```
+
+### Example 3
+Parsing entire file and getting all valid fixes
+```
+let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
+let igc_file = IGCFile::parse(&file).unwrap();
+let valid_fixes = igc_file.get_fixes().clone().into_iter()
+    .filter_map(|fix| match fix {
+       Ok(fix) => Some(fix),
+       Err(_) => None,
+   }).collect::<Vec<Fix>>();
 println!("{}", valid_fixes.len())
 ```
