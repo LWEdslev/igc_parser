@@ -94,6 +94,12 @@ pub struct ParserBuilder {
     comments: bool,
 }
 
+impl Default for ParserBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl ParserBuilder {
     pub fn on_file(self, content: &str) -> Result<Parsed, IGCError> {
         let mut fr_ids: Option<Vec<Result<FlightRecorderID, IGCError>>> = match self.fr_id {
