@@ -31,3 +31,5 @@ pub mod records;
 pub mod igc_file;
 /// Parsing errors
 pub mod error;
+/// Builder for a parser to parse only specific kinds of records
+pub mod parser_builder;
