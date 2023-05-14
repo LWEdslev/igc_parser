@@ -19,7 +19,7 @@ use crate::records::task_info::TaskInfo;
 ///
 /// Not very efficient if you only need to parse one specific kind of record but still fast enough for almost all use cases
 /// # examples
-/// ```
+/// ```rust
 /// use std::fs;
 /// use igc_parser::igc_file::IGCFile;
 /// use igc_parser::records::fix::Fix;

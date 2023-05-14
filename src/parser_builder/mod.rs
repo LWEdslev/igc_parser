@@ -29,52 +29,52 @@ pub struct Parsed {
 }
 
 impl Parsed {
-    pub fn get_fr_ids(&self) -> &Option<Vec<Result<FlightRecorderID, IGCError>>> {
-        &self.fr_ids
+    pub fn get_fr_ids(&self) -> Option<&Vec<Result<FlightRecorderID, IGCError>>> {
+        self.fr_ids.as_ref()
     }
 
-    pub fn get_fixes(&self) -> &Option<Vec<Result<Fix, IGCError>>> {
-        &self.fixes
+    pub fn get_fixes(&self) -> Option<&Vec<Result<Fix, IGCError>>> {
+        self.fixes.as_ref()
     }
 
-    pub fn get_task_info(&self) -> &Option<Vec<Result<TaskInfo, IGCError>>> {
-        &self.task_info
+    pub fn get_task_info(&self) -> Option<&Vec<Result<TaskInfo, IGCError>>> {
+        self.task_info.as_ref()
     }
 
-    pub fn get_differential_gps_records(&self) -> &Option<Vec<Result<DiffGPS, IGCError>>> {
-        &self.differential_gps_records
+    pub fn get_differential_gps_records(&self) -> Option<&Vec<Result<DiffGPS, IGCError>>> {
+        self.differential_gps_records.as_ref()
     }
 
-    pub fn get_events(&self) -> &Option<Vec<Result<Event, IGCError>>> {
-        &self.events
+    pub fn get_events(&self) -> Option<&Vec<Result<Event, IGCError>>> {
+        self.events.as_ref()
     }
 
-    pub fn get_satellite_vec(&self) -> &Option<Vec<Result<Satellite, IGCError>>> {
-        &self.satellite_vec
+    pub fn get_satellite_vec(&self) -> Option<&Vec<Result<Satellite, IGCError>>> {
+        self.satellite_vec.as_ref()
     }
 
-    pub fn get_security_vec(&self) -> &Option<Vec<Result<Security, IGCError>>> {
-        &self.security_vec
+    pub fn get_security_vec(&self) -> Option<&Vec<Result<Security, IGCError>>> {
+        self.security_vec.as_ref()
     }
 
-    pub fn get_file_header_vec(&self) -> &Option<Vec<Result<FileHeader, IGCError>>> {
-        &self.file_header_vec
+    pub fn get_file_header_vec(&self) -> Option<&Vec<Result<FileHeader, IGCError>>> {
+        self.file_header_vec.as_ref()
     }
 
-    pub fn get_fix_extension_vec(&self) -> &Option<Vec<Result<Extension, IGCError>>> {
-        &self.i_extension_vec
+    pub fn get_fix_extension_vec(&self) -> Option<&Vec<Result<Extension, IGCError>>> {
+        self.i_extension_vec.as_ref()
     }
 
-    pub fn get_data_fix_extension_vec(&self) -> &Option<Vec<Result<Extension, IGCError>>> {
-        &self.j_extension_vec
+    pub fn get_data_fix_extension_vec(&self) -> Option<&Vec<Result<Extension, IGCError>>> {
+        self.j_extension_vec.as_ref()
     }
 
-    pub fn get_data_fix_vec(&self) -> &Option<Vec<Result<DataFix, IGCError>>> {
-        &self.data_fix_vec
+    pub fn get_data_fix_vec(&self) -> Option<&Vec<Result<DataFix, IGCError>>> {
+        self.data_fix_vec.as_ref()
     }
 
-    pub fn get_comment_vec(&self) -> &Option<Vec<Result<Comment, IGCError>>> {
-        &self.comment_vec
+    pub fn get_comment_vec(&self) -> Option<&Vec<Result<Comment, IGCError>>> {
+        self.comment_vec.as_ref()
     }
 }
 

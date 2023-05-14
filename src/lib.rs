@@ -11,7 +11,7 @@
 //!
 //! # examples
 //! This is if you want all fixes that have parsed correctly. A similar approach is used for the other records.
-//! ```
+//! ```rust
 //! use std::fs;
 //! use igc_parser::records::{fix::Fix, Record};
 //! let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();

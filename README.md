@@ -10,9 +10,9 @@ You should use this crate if you want to <span style="color:orange"><strong>*eas
 
 For additional information on the records use https://xp-soaring.github.io/igc_file_format/igc_format_2008.html
 
-### Example 1
+### Example: Series of records
 Parsing all fixes (B records)
-```
+```rust
 let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
 let valid_fixes = file.lines().filter_map(|line| {
     match Record::parse(line) {
@@ -23,9 +23,9 @@ let valid_fixes = file.lines().filter_map(|line| {
 println!("{}", valid_fixes.len())
 ```
 
-### Example 2
+### Example: Single record
 Parsing a single record (L record aka comment)
-```
+```rust
 let comment = match Record::parse("LCOMMENTYCOMMENT").unwrap() {
         Record::L(comment) => comment,
         _ => panic!("This was not a comment")
@@ -33,9 +33,9 @@ let comment = match Record::parse("LCOMMENTYCOMMENT").unwrap() {
 println!("{}", comment.content);
 ```
 
-### Example 3
+### Example: Entire file
 Parsing entire file and getting all valid fixes
-```
+```rust
 let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
 let igc_file = IGCFile::parse(&file).unwrap();
 let valid_fixes = igc_file.get_fixes().clone().into_iter()
@@ -44,4 +44,15 @@ let valid_fixes = igc_file.get_fixes().clone().into_iter()
        Err(_) => None,
    }).collect::<Vec<Fix>>();
 println!("{}", valid_fixes.len())
+```
+
+### Example: Specific kind of records
+Use builder pattern to parse only specific kinds of records
+```rust
+use igc_parser::parser_builder::*;
+use std::fs;
+let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
+let builder = ParserBuilder::new().parse_fixes().parse_comments().parse_task_info();
+let parsed = builder.on_file(&file)?;
+let fixes = parsed.get_fixes();
 ```
