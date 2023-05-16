@@ -12,6 +12,7 @@ use crate::records::Record;
 use crate::records::satellite::Satellite;
 use crate::records::security::Security;
 use crate::records::task_info::TaskInfo;
+use crate::Result;
 
 #[derive(Clone)]
 /// For parsing the entire file at once, then it gives access to vectors holding the result of the parsing
@@ -33,37 +34,37 @@ use crate::records::task_info::TaskInfo;
 /// println!("{}", valid_fixes.len())
 /// ```
 pub struct IGCFile {
-    fr_ids: Vec<Result<FlightRecorderID, IGCError>>,
-    fixes: Vec<Result<Fix, IGCError>>,
-    task_info: Vec<Result<TaskInfo, IGCError>>,
-    differential_gps_records: Vec<Result<DiffGPS, IGCError>>,
-    events: Vec<Result<Event, IGCError>>,
-    satellite_vec: Vec<Result<Satellite, IGCError>>,
-    security_vec: Vec<Result<Security, IGCError>>,
-    file_header_vec: Vec<Result<FileHeader, IGCError>>,
-    i_extension_vec: Vec<Result<Extension, IGCError>>,
-    j_extension_vec: Vec<Result<Extension, IGCError>>,
-    data_fix_vec: Vec<Result<DataFix, IGCError>>,
-    comment_vec: Vec<Result<Comment, IGCError>>,
+    fr_ids: Vec<Result<FlightRecorderID>>,
+    fixes: Vec<Result<Fix>>,
+    task_info: Vec<Result<TaskInfo>>,
+    differential_gps_records: Vec<Result<DiffGPS>>,
+    events: Vec<Result<Event>>,
+    satellite_vec: Vec<Result<Satellite>>,
+    security_vec: Vec<Result<Security>>,
+    file_header_vec: Vec<Result<FileHeader>>,
+    i_extension_vec: Vec<Result<Extension>>,
+    j_extension_vec: Vec<Result<Extension>>,
+    data_fix_vec: Vec<Result<DataFix>>,
+    comment_vec: Vec<Result<Comment>>,
 }
 
 impl IGCFile {
     /// # arguments
     /// ´content´ is the UTF-8 content of the file you want to parse,
     /// it is rare for this parsing to return an Err instead of Ok(Self) but it can happen
-    pub fn parse(content: &str) -> Result<Self, IGCError> {
-        let mut fr_ids: Vec<Result<FlightRecorderID, IGCError>> = Vec::new();
-        let mut fixes: Vec<Result<Fix, IGCError>> = Vec::new();
-        let mut task_info: Vec<Result<TaskInfo, IGCError>> = Vec::new();
-        let mut differential_gps_records: Vec<Result<DiffGPS, IGCError>> = Vec::new();
-        let mut events: Vec<Result<Event, IGCError>> = Vec::new();
-        let mut satellite_vec: Vec<Result<Satellite, IGCError>> = Vec::new();
-        let mut security_vec: Vec<Result<Security, IGCError>> = Vec::new();
-        let mut file_header_vec: Vec<Result<FileHeader, IGCError>> = Vec::new();
-        let mut i_extension_vec: Vec<Result<Extension, IGCError>> = Vec::new();
-        let mut j_extension_vec: Vec<Result<Extension, IGCError>> = Vec::new();
-        let mut data_fix_vec: Vec<Result<DataFix, IGCError>> = Vec::new();
-        let mut comment_vec: Vec<Result<Comment, IGCError>> = Vec::new();
+    pub fn parse(content: &str) -> Result<Self> {
+        let mut fr_ids: Vec<Result<FlightRecorderID>> = Vec::new();
+        let mut fixes: Vec<Result<Fix>> = Vec::new();
+        let mut task_info: Vec<Result<TaskInfo>> = Vec::new();
+        let mut differential_gps_records: Vec<Result<DiffGPS>> = Vec::new();
+        let mut events: Vec<Result<Event>> = Vec::new();
+        let mut satellite_vec: Vec<Result<Satellite>> = Vec::new();
+        let mut security_vec: Vec<Result<Security>> = Vec::new();
+        let mut file_header_vec: Vec<Result<FileHeader>> = Vec::new();
+        let mut i_extension_vec: Vec<Result<Extension>> = Vec::new();
+        let mut j_extension_vec: Vec<Result<Extension>> = Vec::new();
+        let mut data_fix_vec: Vec<Result<DataFix>> = Vec::new();
+        let mut comment_vec: Vec<Result<Comment>> = Vec::new();
         for line in content.lines() {
             let record = Record::parse(line);
             match line.chars().next() {
@@ -153,51 +154,51 @@ impl IGCFile {
         })
     }
 
-    pub fn get_fr_ids(&self) -> &Vec<Result<FlightRecorderID, IGCError>> {
+    pub fn get_fr_ids(&self) -> &Vec<Result<FlightRecorderID>> {
         &self.fr_ids
     }
 
-    pub fn get_fixes(&self) -> &Vec<Result<Fix, IGCError>> {
+    pub fn get_fixes(&self) -> &Vec<Result<Fix>> {
         &self.fixes
     }
 
-    pub fn get_task_info(&self) -> &Vec<Result<TaskInfo, IGCError>> {
+    pub fn get_task_info(&self) -> &Vec<Result<TaskInfo>> {
         &self.task_info
     }
 
-    pub fn get_differential_gps_records(&self) -> &Vec<Result<DiffGPS, IGCError>> {
+    pub fn get_differential_gps_records(&self) -> &Vec<Result<DiffGPS>> {
         &self.differential_gps_records
     }
 
-    pub fn get_events(&self) -> &Vec<Result<Event, IGCError>> {
+    pub fn get_events(&self) -> &Vec<Result<Event>> {
         &self.events
     }
 
-    pub fn get_satellite_vec(&self) -> &Vec<Result<Satellite, IGCError>> {
+    pub fn get_satellite_vec(&self) -> &Vec<Result<Satellite>> {
         &self.satellite_vec
     }
 
-    pub fn get_security_vec(&self) -> &Vec<Result<Security, IGCError>> {
+    pub fn get_security_vec(&self) -> &Vec<Result<Security>> {
         &self.security_vec
     }
 
-    pub fn get_file_header_vec(&self) -> &Vec<Result<FileHeader, IGCError>> {
+    pub fn get_file_header_vec(&self) -> &Vec<Result<FileHeader>> {
         &self.file_header_vec
     }
 
-    pub fn get_i_extension_vec(&self) -> &Vec<Result<Extension, IGCError>> {
+    pub fn get_i_extension_vec(&self) -> &Vec<Result<Extension>> {
         &self.i_extension_vec
     }
 
-    pub fn get_j_extension_vec(&self) -> &Vec<Result<Extension, IGCError>> {
+    pub fn get_j_extension_vec(&self) -> &Vec<Result<Extension>> {
         &self.j_extension_vec
     }
 
-    pub fn get_data_fix_vec(&self) -> &Vec<Result<DataFix, IGCError>> {
+    pub fn get_data_fix_vec(&self) -> &Vec<Result<DataFix>> {
         &self.data_fix_vec
     }
 
-    pub fn get_comment_vec(&self) -> &Vec<Result<Comment, IGCError>> {
+    pub fn get_comment_vec(&self) -> &Vec<Result<Comment>> {
         &self.comment_vec
     }
 }

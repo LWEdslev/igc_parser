@@ -1,7 +1,7 @@
 use std::num::ParseIntError;
 use crate::error::IGCError;
 use crate::error::IGCError::ExtensionInitError;
-
+use crate::Result;
 #[derive(Debug, Clone)]
 pub enum ExtensionType {I, J}
 
@@ -13,7 +13,7 @@ pub struct Extension {
 }
 
 impl Extension {
-    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self> {
         let extension_type = match &line[0..1] {
             "I" => {ExtensionType::I},
             "J" => {ExtensionType::J},
@@ -32,7 +32,7 @@ impl Extension {
             .map(|c|
                 (c[0..2].iter().collect::<String>().parse::<u8>(),
                  c[2..4].iter().collect::<String>().parse::<u8>(),
-                 c[4..7].iter().collect::<String>())).collect::<Vec<(Result<u8, ParseIntError>, Result<u8, ParseIntError>, String)>>();
+                 c[4..7].iter().collect::<String>())).collect::<Vec<(core::result::Result<u8, ParseIntError>, core::result::Result<u8, ParseIntError>, String)>>();
         if !extensions.iter().all(|(start, end, _)| start.is_ok() && end.is_ok()) {
             return Err(ExtensionInitError(format!("'{line}' has invalid start/end characters")))
         }

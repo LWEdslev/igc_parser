@@ -1,6 +1,7 @@
 use crate::error::IGCError;
 use crate::records::{util::{Coordinate, Time}};
 use crate::error::IGCError::FixInitError;
+use crate::Result;
 
 #[derive(Debug, Clone, PartialEq)]
 /// Fix
@@ -13,7 +14,7 @@ pub struct Fix {
 }
 
 impl Fix {
-    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> {
+    pub(crate) fn parse(line: &str) -> Result<Self> {
         if line.chars().count() < 35 {
             return Err(FixInitError(format!("\"{}\" is too short to be parsed as a fix", line)))
         }

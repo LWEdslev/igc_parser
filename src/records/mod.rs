@@ -1,4 +1,4 @@
-
+use crate::Result;
 use crate::records::diff_gps::DiffGPS;
 use crate::error::IGCError;
 use crate::error::IGCError::{RecordInitError};
@@ -53,7 +53,7 @@ impl Record {
     /// };
     /// println!("Succesfully parsed: {:?}", fix)
     /// ```
-    pub fn parse(line: &str) -> Result<Self, IGCError> {
+    pub fn parse(line: &str) -> Result<Self> {
         match line.chars().next() {
             None => Err(RecordInitError(format!("'{}' could not get first character", line))),
             Some(letter) => match letter {

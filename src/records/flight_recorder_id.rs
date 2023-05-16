@@ -1,5 +1,6 @@
 use crate::error::IGCError;
 use crate::error::IGCError::FRIDInitError;
+use crate::Result;
 
 
 #[derive(Debug, Clone)]
@@ -10,7 +11,7 @@ pub struct FlightRecorderID {
 }
 
 impl FlightRecorderID {
-    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self> {
         if line.chars().count() < 7 { return Err(FRIDInitError(format!("'{}' is too short for an A record", line)))};
         let manufacturer = line[1..4].to_string();
         let id = line[4..7].to_string();

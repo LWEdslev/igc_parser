@@ -12,68 +12,69 @@ use crate::records::Record;
 use crate::records::satellite::Satellite;
 use crate::records::security::Security;
 use crate::records::task_info::TaskInfo;
+use crate::Result;
 
 pub struct Parsed {
-    fr_ids: Option<Vec<Result<FlightRecorderID, IGCError>>>,
-    fixes: Option<Vec<Result<Fix, IGCError>>>,
-    task_info: Option<Vec<Result<TaskInfo, IGCError>>>,
-    differential_gps_records: Option<Vec<Result<DiffGPS, IGCError>>>,
-    events: Option<Vec<Result<Event, IGCError>>>,
-    satellite_vec: Option<Vec<Result<Satellite, IGCError>>>,
-    security_vec: Option<Vec<Result<Security, IGCError>>>,
-    file_header_vec: Option<Vec<Result<FileHeader, IGCError>>>,
-    i_extension_vec: Option<Vec<Result<Extension, IGCError>>>,
-    j_extension_vec: Option<Vec<Result<Extension, IGCError>>>,
-    data_fix_vec: Option<Vec<Result<DataFix, IGCError>>>,
-    comment_vec: Option<Vec<Result<Comment, IGCError>>>,
+    fr_ids: Option<Vec<Result<FlightRecorderID>>>,
+    fixes: Option<Vec<Result<Fix>>>,
+    task_info: Option<Vec<Result<TaskInfo>>>,
+    differential_gps_records: Option<Vec<Result<DiffGPS>>>,
+    events: Option<Vec<Result<Event>>>,
+    satellite_vec: Option<Vec<Result<Satellite>>>,
+    security_vec: Option<Vec<Result<Security>>>,
+    file_header_vec: Option<Vec<Result<FileHeader>>>,
+    i_extension_vec: Option<Vec<Result<Extension>>>,
+    j_extension_vec: Option<Vec<Result<Extension>>>,
+    data_fix_vec: Option<Vec<Result<DataFix>>>,
+    comment_vec: Option<Vec<Result<Comment>>>,
 }
 
 impl Parsed {
-    pub fn get_fr_ids(&self) -> Option<&Vec<Result<FlightRecorderID, IGCError>>> {
+    pub fn get_fr_ids(&self) -> Option<&Vec<Result<FlightRecorderID>>> {
         self.fr_ids.as_ref()
     }
 
-    pub fn get_fixes(&self) -> Option<&Vec<Result<Fix, IGCError>>> {
+    pub fn get_fixes(&self) -> Option<&Vec<Result<Fix>>> {
         self.fixes.as_ref()
     }
 
-    pub fn get_task_info(&self) -> Option<&Vec<Result<TaskInfo, IGCError>>> {
+    pub fn get_task_info(&self) -> Option<&Vec<Result<TaskInfo>>> {
         self.task_info.as_ref()
     }
 
-    pub fn get_differential_gps_records(&self) -> Option<&Vec<Result<DiffGPS, IGCError>>> {
+    pub fn get_differential_gps_records(&self) -> Option<&Vec<Result<DiffGPS>>> {
         self.differential_gps_records.as_ref()
     }
 
-    pub fn get_events(&self) -> Option<&Vec<Result<Event, IGCError>>> {
+    pub fn get_events(&self) -> Option<&Vec<Result<Event>>> {
         self.events.as_ref()
     }
 
-    pub fn get_satellite_vec(&self) -> Option<&Vec<Result<Satellite, IGCError>>> {
+    pub fn get_satellite_vec(&self) -> Option<&Vec<Result<Satellite>>> {
         self.satellite_vec.as_ref()
     }
 
-    pub fn get_security_vec(&self) -> Option<&Vec<Result<Security, IGCError>>> {
+    pub fn get_security_vec(&self) -> Option<&Vec<Result<Security>>> {
         self.security_vec.as_ref()
     }
 
-    pub fn get_file_header_vec(&self) -> Option<&Vec<Result<FileHeader, IGCError>>> {
+    pub fn get_file_header_vec(&self) -> Option<&Vec<Result<FileHeader>>> {
         self.file_header_vec.as_ref()
     }
 
-    pub fn get_fix_extension_vec(&self) -> Option<&Vec<Result<Extension, IGCError>>> {
+    pub fn get_fix_extension_vec(&self) -> Option<&Vec<Result<Extension>>> {
         self.i_extension_vec.as_ref()
     }
 
-    pub fn get_data_fix_extension_vec(&self) -> Option<&Vec<Result<Extension, IGCError>>> {
+    pub fn get_data_fix_extension_vec(&self) -> Option<&Vec<Result<Extension>>> {
         self.j_extension_vec.as_ref()
     }
 
-    pub fn get_data_fix_vec(&self) -> Option<&Vec<Result<DataFix, IGCError>>> {
+    pub fn get_data_fix_vec(&self) -> Option<&Vec<Result<DataFix>>> {
         self.data_fix_vec.as_ref()
     }
 
-    pub fn get_comment_vec(&self) -> Option<&Vec<Result<Comment, IGCError>>> {
+    pub fn get_comment_vec(&self) -> Option<&Vec<Result<Comment>>> {
         self.comment_vec.as_ref()
     }
 }
@@ -101,52 +102,52 @@ impl Default for ParserBuilder {
 }
 
 impl ParserBuilder {
-    pub fn on_file(self, content: &str) -> Result<Parsed, IGCError> {
-        let mut fr_ids: Option<Vec<Result<FlightRecorderID, IGCError>>> = match self.fr_id {
+    pub fn on_file(self, content: &str) -> Result<Parsed> {
+        let mut fr_ids: Option<Vec<Result<FlightRecorderID>>> = match self.fr_id {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut fixes: Option<Vec<Result<Fix, IGCError>>> = match self.fixes {
+        let mut fixes: Option<Vec<Result<Fix>>> = match self.fixes {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut task_info: Option<Vec<Result<TaskInfo, IGCError>>> = match self.task_info {
+        let mut task_info: Option<Vec<Result<TaskInfo>>> = match self.task_info {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut differential_gps_records: Option<Vec<Result<DiffGPS, IGCError>>> = match self.differential_gps_records {
+        let mut differential_gps_records: Option<Vec<Result<DiffGPS>>> = match self.differential_gps_records {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut events: Option<Vec<Result<Event, IGCError>>> = match self.events {
+        let mut events: Option<Vec<Result<Event>>> = match self.events {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut satellite_vec: Option<Vec<Result<Satellite, IGCError>>> = match self.satellite {
+        let mut satellite_vec: Option<Vec<Result<Satellite>>> = match self.satellite {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut security_vec: Option<Vec<Result<Security, IGCError>>> = match self.security {
+        let mut security_vec: Option<Vec<Result<Security>>> = match self.security {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut file_header_vec: Option<Vec<Result<FileHeader, IGCError>>> = match self.file_header {
+        let mut file_header_vec: Option<Vec<Result<FileHeader>>> = match self.file_header {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut i_extension_vec: Option<Vec<Result<Extension, IGCError>>> = match self.i_extension {
+        let mut i_extension_vec: Option<Vec<Result<Extension>>> = match self.i_extension {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut j_extension_vec: Option<Vec<Result<Extension, IGCError>>> = match self.j_extension {
+        let mut j_extension_vec: Option<Vec<Result<Extension>>> = match self.j_extension {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut data_fix_vec: Option<Vec<Result<DataFix, IGCError>>> = match self.data_fix {
+        let mut data_fix_vec: Option<Vec<Result<DataFix>>> = match self.data_fix {
             true => Some(Vec::new()),
             false => None,
         };
-        let mut comment_vec: Option<Vec<Result<Comment, IGCError>>> = match self.comments {
+        let mut comment_vec: Option<Vec<Result<Comment>>> = match self.comments {
             true => Some(Vec::new()),
             false => None,
         };

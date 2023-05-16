@@ -24,6 +24,9 @@
 //! println!("{}", valid_fixes.len())
 //! ```
 
+use crate::error::IGCError;
+
+type Result<T> = core::result::Result<T, IGCError>;
 
 /// All different type of IGC records
 pub mod records;

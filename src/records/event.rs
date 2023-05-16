@@ -1,7 +1,7 @@
 use crate::error::IGCError;
 use crate::error::IGCError::EventInitError;
 use crate::records::util::Time;
-
+use crate::Result;
 
 #[derive(Debug, Clone)]
 pub struct Event {
@@ -11,7 +11,7 @@ pub struct Event {
 }
 
 impl Event {
-    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self> {
         if line.len() < 10 { return Err(EventInitError(format!("'{line}' is too short to be parsed as an event record"))) };
         let time = Time::parse(&line[1..7])?;
         let event_type = line[7..10].to_string();

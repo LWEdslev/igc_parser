@@ -1,6 +1,7 @@
 use crate::error::IGCError;
 use crate::error::IGCError::FileHeaderInitError;
 use crate::records::util::{Date};
+use crate::Result;
 
 #[derive(Debug, Clone)]
 pub enum FileHeader {
@@ -20,13 +21,13 @@ pub enum FileHeader {
     CompetitionClass(String),
 }
 
-fn get_file_header_with_string_content<'a>(line: &'a str, header_name: &str) -> Result<&'a str, IGCError> {
+fn get_file_header_with_string_content<'a>(line: &'a str, header_name: &str) -> Result<&'a str> {
     if line.len() < header_name.len() { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a pilot in charge record"))) };
     Ok(&line[header_name.len()..])
 }
 
 impl FileHeader {
-    pub(crate) fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self> {
         match &line[0..5] {
             "HFDTE" => {
                 if line.len() != 11 { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header date"))) };

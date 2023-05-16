@@ -1,6 +1,7 @@
 use crate::error::IGCError;
 use crate::error::IGCError::TaskInfoInitError;
 use crate::records::util::{Coordinate, Date, Time};
+use crate::Result;
 
 #[derive(Debug, Clone)]
 pub enum TaskInfo {
@@ -9,7 +10,7 @@ pub enum TaskInfo {
 }
 
 impl TaskInfo {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub(crate) fn parse(line: &str) -> Result<Self> {
         if line.len() < 18 { return Err(TaskInfoInitError(format!("'{}' is too short to be parsed as kind of task info record", line))) }
         if line[1..17].chars().all(|c| c.is_numeric()) {
             Ok(TaskInfo::DeclarationTime(DeclarationTime::parse(line)?))
@@ -26,7 +27,7 @@ pub struct TaskPoint {
 }
 
 impl TaskPoint {
-    pub fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    pub fn parse(line: &str) -> Result<Self> {
         let coordinate = Coordinate::parse(&line[1..18])?;
         let name = if line.len() == 18 { None } else {
             Some(line[18..].to_string())
@@ -43,7 +44,7 @@ pub struct DeclarationTime {
 }
 
 impl DeclarationTime {
-    fn parse(line: &str) -> Result<Self, IGCError> where Self: Sized {
+    fn parse(line: &str) -> Result<Self> {
         if line.len() < 23 { return Err(TaskInfoInitError(format!("'{}' is too short to be a declaration time record", line))) }
         let date = Date::parse(&line[1..7])?;
         let time = Time::parse(&line[7..13])?;
