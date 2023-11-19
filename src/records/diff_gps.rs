@@ -1,4 +1,3 @@
-use crate::error::IGCError;
 use crate::error::IGCError::DiffGPSInitError;
 use crate::Result;
 

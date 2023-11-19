@@ -1,5 +1,4 @@
 use std::num::ParseIntError;
-use crate::error::IGCError;
 use crate::error::IGCError::ExtensionInitError;
 use crate::Result;
 

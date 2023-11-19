@@ -1,4 +1,3 @@
-use crate::error::IGCError;
 use crate::error::IGCError::TaskInfoInitError;
 use crate::records::util::{Coordinate, Date, Time};
 use crate::Result;

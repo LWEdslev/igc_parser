@@ -1,6 +1,5 @@
-use crate::error::IGCError;
 use crate::error::IGCError::FileHeaderInitError;
-use crate::records::util::{Date};
+use crate::records::util::Date;
 use crate::Result;
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 

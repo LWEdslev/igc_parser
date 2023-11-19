@@ -56,3 +56,7 @@ let builder = ParserBuilder::new().parse_fixes().parse_comments().parse_task_inf
 let parsed = builder.on_file(&file).unwrap();
 let fixes = parsed.get_fixes();
 ```
+
+### New in 0.1.5
+- Serde feature (use feature flag ```serde```)
+- Errors now implement ```std::error::Error``` through ```thiserror```

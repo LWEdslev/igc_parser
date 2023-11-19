@@ -1,4 +1,3 @@
-use crate::error::IGCError;
 use crate::error::IGCError::IGCFileInitError;
 use crate::records::comment::Comment;
 use crate::records::data_fix::DataFix;

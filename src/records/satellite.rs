@@ -1,6 +1,5 @@
-use crate::error::IGCError;
 use crate::error::IGCError::SatelliteInitError;
-use crate::records::util::{Time};
+use crate::records::util::Time;
 use crate::Result;
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 

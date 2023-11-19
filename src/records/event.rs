@@ -1,4 +1,3 @@
-use crate::error::IGCError;
 use crate::error::IGCError::EventInitError;
 use crate::records::util::Time;
 use crate::Result;
@@ -32,6 +31,8 @@ impl Event {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
     fn event_is_parsed_correctly() {
         let event = Event::parse("E160245PEV").unwrap();
         assert_eq!(event.time, Time::from_hms(16, 2, 45).unwrap());

@@ -1,5 +1,4 @@
 use crate::Result;
-use crate::error::IGCError;
 use crate::error::IGCError::*;
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 

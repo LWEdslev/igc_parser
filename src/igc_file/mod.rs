@@ -1,7 +1,6 @@
 use crate::records::comment::Comment;
 use crate::records::data_fix::DataFix;
 use crate::records::diff_gps::DiffGPS;
-use crate::error::IGCError;
 use crate::error::IGCError::IGCFileInitError;
 use crate::records::event::Event;
 use crate::records::extension::Extension;
