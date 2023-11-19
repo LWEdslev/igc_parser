@@ -2,7 +2,9 @@ use crate::error::IGCError;
 use crate::records::{util::{Coordinate, Time}};
 use crate::error::IGCError::FixInitError;
 use crate::Result;
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone, PartialEq)]
 /// Fix
 pub struct Fix {

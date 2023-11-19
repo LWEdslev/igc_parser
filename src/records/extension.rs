@@ -2,9 +2,16 @@ use std::num::ParseIntError;
 use crate::error::IGCError;
 use crate::error::IGCError::ExtensionInitError;
 use crate::Result;
+
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
+
+
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub enum ExtensionType {I, J}
 
+
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub struct Extension {
     pub extension_type: ExtensionType,

@@ -1,9 +1,11 @@
 use crate::Result;
 use crate::error::IGCError;
 use crate::error::IGCError::*;
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
 type Seconds = u32;
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Clone, Debug)]
 pub struct Time {
     h: u8,
@@ -11,7 +13,7 @@ pub struct Time {
     s: u8,
 }
 
-impl  Time {
+impl Time {
     pub fn parse(line: &str) -> Result<Self> {
         if line.chars().count() != 6 {return Err(TimeInitError(format!("\"{}\" is not 6 characters long", line)))}
         match (line[0..2].parse::<u8>(), line[2..4].parse::<u8>(), line[4..6].parse::<u8>()) {
@@ -48,6 +50,7 @@ impl  Time {
     }
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Clone, Debug)]
 pub struct Date {
     pub d: u8,
@@ -71,6 +74,7 @@ impl Date {
     }
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Clone, Debug)]
 pub struct Coordinate {
     pub latitude: Latitude,
@@ -88,6 +92,7 @@ impl Coordinate {
     }
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Clone, Debug)]
 pub struct Latitude {
     pub degrees: u8,
@@ -115,6 +120,7 @@ impl Latitude {
     }
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Clone, Debug)]
 pub struct Longitude {
     pub degrees: u8,

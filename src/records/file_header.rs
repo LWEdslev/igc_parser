@@ -2,7 +2,9 @@ use crate::error::IGCError;
 use crate::error::IGCError::FileHeaderInitError;
 use crate::records::util::{Date};
 use crate::Result;
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub enum FileHeader {
     Date(Date),

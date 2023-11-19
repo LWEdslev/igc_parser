@@ -1,12 +1,17 @@
 use crate::error::IGCError;
 use crate::error::IGCError::DiffGPSInitError;
 use crate::Result;
+
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
+
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub struct DiffGPS {
     pub qualifier: DiffGPSQualifier,
     pub dgps_station_id: u16,
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone, PartialEq)]
 pub enum DiffGPSQualifier {
     GPS,

@@ -5,3 +5,7 @@ edition = "2021"
 license = "MIT"
 description = "A high-level parsing/deserializing crate for IGC flight recorder files"
 repository = "https://github.com/LWEdslev/igc_parser"
+
+[dependencies]
+serde = { version = "1.0.192", features = ["derive"], optional = true }
+thiserror = "1.0.50"

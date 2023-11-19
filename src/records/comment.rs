@@ -1,6 +1,9 @@
-use crate::error::IGCError;
 use crate::error::IGCError::CommentInitError;
 use crate::Result;
+
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
+
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub struct Comment {
     pub content: String

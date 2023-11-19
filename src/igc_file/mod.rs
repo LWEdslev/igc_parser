@@ -14,6 +14,9 @@ use crate::records::security::Security;
 use crate::records::task_info::TaskInfo;
 use crate::Result;
 
+#[cfg(feature = "serde")] use serde::{Serialize, Deserialize};
+
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Clone)]
 /// For parsing the entire file at once, then it gives access to vectors holding the result of the parsing
 ///

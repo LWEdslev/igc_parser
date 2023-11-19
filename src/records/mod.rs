@@ -6,6 +6,8 @@ use crate::records::{event::Event, file_header::FileHeader, fix::Fix, flight_rec
 use crate::records::comment::Comment;
 use crate::records::data_fix::DataFix;
 use crate::records::extension::Extension;
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
+
 
 pub mod util;
 pub mod fix;
@@ -22,6 +24,7 @@ pub mod data_fix;
 
 /// Record enum for getting different record types
 /// Each element contains a struct/enum that is the result of parsing a specific line
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub enum Record {
     A(FlightRecorderID),

@@ -2,7 +2,9 @@ use crate::error::IGCError;
 use crate::error::IGCError::TaskInfoInitError;
 use crate::records::util::{Coordinate, Date, Time};
 use crate::Result;
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub enum TaskInfo {
     TaskPoint(TaskPoint),
@@ -20,6 +22,7 @@ impl TaskInfo {
     }
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub struct TaskPoint {
     pub coordinate: Coordinate,
@@ -36,6 +39,7 @@ impl TaskPoint {
     }
 }
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub struct DeclarationTime {
     pub date: Date,

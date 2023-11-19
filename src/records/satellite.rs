@@ -2,7 +2,9 @@ use crate::error::IGCError;
 use crate::error::IGCError::SatelliteInitError;
 use crate::records::util::{Time};
 use crate::Result;
+#[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
+#[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(Debug, Clone)]
 pub struct Satellite {
     pub time: Time,
