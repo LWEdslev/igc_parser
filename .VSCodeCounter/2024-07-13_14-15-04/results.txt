@@ -1,0 +1,53 @@
+Date : 2024-07-13 14:15:04
+Directory : /home/lasse/rust/igc_parser
+Total : 21 files,  1481 codes, 83 comments, 182 blanks, all 1746 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Rust     |         17 |      1,329 |         81 |        161 |      1,571 |
+| TOML     |          2 |         85 |          2 |         12 |         99 |
+| Markdown |          2 |         67 |          0 |          9 |         76 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                          | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                             |         21 |      1,481 |         83 |        182 |      1,746 |
+| . (Files)                                                     |          4 |        152 |          2 |         21 |        175 |
+| src                                                           |         17 |      1,329 |         81 |        161 |      1,571 |
+| src (Files)                                                   |          2 |         49 |         29 |          8 |         86 |
+| src/igc_file                                                  |          1 |        168 |         21 |         18 |        207 |
+| src/parser_builder                                            |          1 |        354 |         12 |         43 |        409 |
+| src/records                                                   |         13 |        758 |         19 |         92 |        869 |
++---------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                      | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /home/lasse/rust/igc_parser/Cargo.lock                        | TOML     |         75 |          2 |         10 |         87 |
+| /home/lasse/rust/igc_parser/Cargo.toml                        | TOML     |         10 |          0 |          2 |         12 |
+| /home/lasse/rust/igc_parser/README.md                         | Markdown |         54 |          0 |          8 |         62 |
+| /home/lasse/rust/igc_parser/RECORD_PREFIX_GUIDE.md            | Markdown |         13 |          0 |          1 |         14 |
+| /home/lasse/rust/igc_parser/src/error.rs                      | Rust     |         38 |          0 |          1 |         39 |
+| /home/lasse/rust/igc_parser/src/igc_file/mod.rs               | Rust     |        168 |         21 |         18 |        207 |
+| /home/lasse/rust/igc_parser/src/lib.rs                        | Rust     |         11 |         29 |          7 |         47 |
+| /home/lasse/rust/igc_parser/src/parser_builder/mod.rs         | Rust     |        354 |         12 |         43 |        409 |
+| /home/lasse/rust/igc_parser/src/records/comment.rs            | Rust     |         15 |          0 |          3 |         18 |
+| /home/lasse/rust/igc_parser/src/records/data_fix.rs           | Rust     |         18 |          0 |          3 |         21 |
+| /home/lasse/rust/igc_parser/src/records/diff_gps.rs           | Rust     |         44 |          0 |          9 |         53 |
+| /home/lasse/rust/igc_parser/src/records/event.rs              | Rust     |         35 |          0 |          8 |         43 |
+| /home/lasse/rust/igc_parser/src/records/extension.rs          | Rust     |         47 |          0 |          7 |         54 |
+| /home/lasse/rust/igc_parser/src/records/file_header.rs        | Rust     |         94 |          0 |          3 |         97 |
+| /home/lasse/rust/igc_parser/src/records/fix.rs                | Rust     |         82 |          3 |          9 |         94 |
+| /home/lasse/rust/igc_parser/src/records/flight_recorder_id.rs | Rust     |         34 |          0 |          3 |         37 |
+| /home/lasse/rust/igc_parser/src/records/mod.rs                | Rust     |        112 |         16 |          7 |        135 |
+| /home/lasse/rust/igc_parser/src/records/satellite.rs          | Rust     |         33 |          0 |          6 |         39 |
+| /home/lasse/rust/igc_parser/src/records/security.rs           | Rust     |         24 |          0 |          5 |         29 |
+| /home/lasse/rust/igc_parser/src/records/task_info.rs          | Rust     |         88 |          0 |         12 |        100 |
+| /home/lasse/rust/igc_parser/src/records/util.rs               | Rust     |        132 |          0 |         17 |        149 |
+| Total                                                         |          |      1,481 |         83 |        182 |      1,746 |
++---------------------------------------------------------------+----------+------------+------------+------------+------------+

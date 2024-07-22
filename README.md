@@ -1,26 +1,47 @@
-# <span style="color:orange">IGC Parser</span>
-A <span style="color:orange"><strong>*high-level*</strong></span> parsing crate for IGC flight recorder files.
-<br /> With most focus on: 
-- <span style="color:orange"><strong>*Easy*</strong></span> to use
-- <span style="color:orange"><strong>*No run-time asserts*</strong></span> meaning that any errors will be through the ```Result``` type
-- A  <span style="color:orange"><em><strong>*panic free*</strong></em></span> crate
-  
-You should use this crate if you want to <span style="color:orange"><strong>*easily, quickly*</strong></span> and <span style="color:orange"><strong>*safely*</strong></span> parse igc files.
-
+# IGC Parser
+A parsing crate for IGC flight recorder files.
+Features: 
+- No run-time asserts meaning that any errors will be through the ```Result``` type
+- Owned types, meaning no lifetimes
+- `Rc<str>` and `Arc<str>` for immutable string types to improve cloning efficiency compared to `String`
+- Builder to parse specific items efficiently
 
 For additional information on the records use https://xp-soaring.github.io/igc_file_format/igc_format_2008.html
+
+### Example: Specific kind of records
+Use builder pattern to parse only specific kinds of records, this is more efficient than parsing everything
+```rust
+let file = fs::read_to_string("./examples/example.igc")?;
+let builder = parser_builder::new_builder()
+    .parse_a_records()
+    .parse_e_records()
+    .parse_b_records();
+let parsed = builder.on_file(&file)?;
+
+// Then we can get the records we specified
+let a_records = parsed.get_a_records();
+let e_records = parsed.get_e_records();
+let b_records = parsed.get_b_records();
+
+// NOTE This below does not compile since our builder was not set to parse C records
+// let c_records = parsed.get_c_records();
+```
 
 ### Example: Series of records
 Parsing all fixes (B records)
 ```rust
-let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
-let valid_fixes = file.lines().filter_map(|line| {
-    match Record::parse(line) {
-        Ok(Record::B(fix)) => Some(fix),
-        _ => None,
+let file = fs::read_to_string("./examples/example.igc")?;
+let valid_fixes: Vec<Fix> = file
+    .lines()
+    .filter_map(|line| {
+        if let Record::B(fix) = Record::parse(line).ok()? { 
+            Some(fix) 
+        } else { 
+            None
         }
-    }).collect::<Vec<Fix>>();
-println!("{}", valid_fixes.len())
+    })
+    .collect();
+println!("{}", valid_fixes.len());
 ```
 
 ### Example: Single record
@@ -36,27 +57,18 @@ println!("{}", comment.content);
 ### Example: Entire file
 Parsing entire file and getting all valid fixes
 ```rust
-let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
-let igc_file = IGCFile::parse(&file).unwrap();
-let valid_fixes = igc_file.get_fixes().clone().into_iter()
-    .filter_map(|fix| match fix {
-       Ok(fix) => Some(fix),
-       Err(_) => None,
-   }).collect::<Vec<Fix>>();
-println!("{}", valid_fixes.len())
+let file = fs::read_to_string("./examples/example.igc")?;
+let igc_file = IGCFile::parse(&file)?;
+let valid_fixes: Vec<Fix> = igc_file
+    .get_fixes()
+    .clone()
+    .into_iter()
+    .filter_map(|fix| fix.ok())
+    .collect();
+println!("{}", valid_fixes.len());
 ```
 
-### Example: Specific kind of records
-Use builder pattern to parse only specific kinds of records
-```rust
-use igc_parser::parser_builder::*;
-use std::fs;
-let file = fs::read_to_string("./examples/example.igc").unwrap().parse::<String>().unwrap();
-let builder = ParserBuilder::new().parse_fixes().parse_comments().parse_task_info();
-let parsed = builder.on_file(&file).unwrap();
-let fixes = parsed.get_fixes();
-```
-
-### New in 0.1.5
-- Serde feature (use feature flag ```serde```)
-- Errors now implement ```std::error::Error``` through ```thiserror```
+### New in 0.1.6
+- Added typestate pattern for the builder to avoid returning `Option`s
+- Changed from `String` to `Rc<str>` to allow more efficient cloning
+- Added `thread-safe` feature where the string types will be `Arc<str>`

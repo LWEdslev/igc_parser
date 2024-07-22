@@ -24,9 +24,17 @@
 //! println!("{}", valid_fixes.len())
 //! ```
 
+use std::{rc::Rc, sync::Arc};
+
 use crate::error::IGCError;
 
 type Result<T> = core::result::Result<T, IGCError>;
+
+#[cfg(feature = "thread-safe")]
+type StrWrapper = Arc<str>;
+
+#[cfg(not(feature = "thread-safe"))]
+type StrWrapper = Rc<str>;
 
 /// All different type of IGC records
 pub mod records;

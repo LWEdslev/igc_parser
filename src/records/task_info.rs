@@ -1,6 +1,6 @@
 use crate::error::IGCError::TaskInfoInitError;
 use crate::records::util::{Coordinate, Date, Time};
-use crate::Result;
+use crate::{Result, StrWrapper};
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
@@ -25,15 +25,13 @@ impl TaskInfo {
 #[derive(Debug, Clone)]
 pub struct TaskPoint {
     pub coordinate: Coordinate,
-    pub name: Option<String>,
+    pub name: Option<StrWrapper>,
 }
 
 impl TaskPoint {
     pub fn parse(line: &str) -> Result<Self> {
         let coordinate = Coordinate::parse(&line[1..18])?;
-        let name = if line.len() == 18 { None } else {
-            Some(line[18..].to_string())
-        };
+        let name = (line.len() != 18).then(|| line[18..].to_string().into());
         Ok(Self { coordinate, name })
     }
 }
@@ -43,7 +41,7 @@ impl TaskPoint {
 pub struct DeclarationTime {
     pub date: Date,
     pub time: Time,
-    extra: String,
+    extra: StrWrapper,
 }
 
 impl DeclarationTime {
@@ -51,14 +49,14 @@ impl DeclarationTime {
         if line.len() < 23 { return Err(TaskInfoInitError(format!("'{}' is too short to be a declaration time record", line))) }
         let date = Date::parse(&line[1..7])?;
         let time = Time::parse(&line[7..13])?;
-        let extra = line[13..].to_string();
+        let extra = line[13..].to_string().into();
         Ok(Self { date, time, extra })
     }
 }
 
 impl DeclarationTime {
-    pub fn get_extra(&self) -> String {
-        self.extra.clone()
+    pub fn get_extra(&self) -> StrWrapper {
+        self.extra.clone().into()
     }
 }
 
@@ -92,7 +90,7 @@ mod tests {
                 is_east: true,
             });
 
-            assert_eq!(task_point.name.unwrap(), String::from("TASA Taupo Start A"))
+            assert_eq!(task_point.name.unwrap(), String::from("TASA Taupo Start A").into())
         } else {
             assert!(false)
         }

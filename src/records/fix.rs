@@ -1,6 +1,8 @@
+use std::rc::Rc;
+
 use crate::records::util::{Coordinate, Time};
 use crate::error::IGCError::FixInitError;
-use crate::Result;
+use crate::{Result, StrWrapper};
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
 
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
@@ -11,7 +13,7 @@ pub struct Fix {
     pub coordinates: Coordinate,
     pub pressure_alt: i16,
     pub gps_alt: Option<i16>, //option because of validity flag
-    pub extension: String,
+    pub extension: StrWrapper,
 }
 
 impl Fix {
@@ -37,7 +39,7 @@ impl Fix {
             Err(_) => return Err(FixInitError(format!("\"{}\" could not parse pressure altitude", line)))
         };
 
-        let extension = line[35..].to_string();
+        let extension = line[35..].to_string().into();
 
         Ok(
             Fix {
@@ -84,7 +86,7 @@ mod tests {
             assert_eq!(true_coordinate, coordinates);
             assert_eq!(pressure_alt, 114);
             assert_eq!(gps_alt, Some(150));
-            assert_eq!(extension, String::from("00854106968064092190039002770100"));
+            assert_eq!(extension, String::from("00854106968064092190039002770100").into());
         } else {
             assert!(false)
         }

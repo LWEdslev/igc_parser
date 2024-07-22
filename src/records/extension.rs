@@ -1,5 +1,5 @@
 use std::num::ParseIntError;
-use crate::error::IGCError::ExtensionInitError;
+use crate::{error::IGCError::ExtensionInitError, StrWrapper};
 use crate::Result;
 
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
@@ -15,7 +15,7 @@ pub enum ExtensionType {I, J}
 pub struct Extension {
     pub extension_type: ExtensionType,
     pub number_of_extensions: u8,
-    pub extensions: Vec<(u8, u8, String)>
+    pub extensions: Vec<(u8, u8, StrWrapper)>
 }
 
 impl Extension {
@@ -44,10 +44,10 @@ impl Extension {
         }
         let extensions = extensions.into_iter().map(|(start, end, s)| {
             match (start, end) {
-                (Ok(start), Ok(end)) => (start, end, s),
+                (Ok(start), Ok(end)) => (start, end, s.into()),
                 _ => unreachable!(),
             }
-        }).collect::<Vec<(u8, u8, String)>>();
+        }).collect::<Vec<_>>();
 
         Ok(Self {extension_type, number_of_extensions, extensions})
     }

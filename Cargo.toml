@@ -1,11 +1,16 @@
 [package]
 name = "igc_parser"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 license = "MIT"
 description = "A high-level parsing/deserializing crate for IGC flight recorder files"
 repository = "https://github.com/LWEdslev/igc_parser"
 
 [dependencies]
-serde = { version = "1.0.192", features = ["derive"], optional = true }
+paste = "1.0.15"
+serde = { version = "1.0.192", features = ["derive", "rc"], optional = true }
 thiserror = "1.0.50"
+
+[features]
+thread-safe = []
+full = ["thread-safe", "serde"]

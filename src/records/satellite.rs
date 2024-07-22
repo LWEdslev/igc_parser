@@ -1,4 +1,4 @@
-use crate::error::IGCError::SatelliteInitError;
+use crate::{error::IGCError::SatelliteInitError, StrWrapper};
 use crate::records::util::Time;
 use crate::Result;
 #[cfg(feature = "serde")] use serde::{Deserialize, Serialize};
@@ -7,7 +7,7 @@ use crate::Result;
 #[derive(Debug, Clone)]
 pub struct Satellite {
     pub time: Time,
-    pub satellite_ids: Vec<String>,
+    pub satellite_ids: Vec<StrWrapper>,
 }
 
 impl Satellite {
@@ -18,8 +18,8 @@ impl Satellite {
             .chars()
             .collect::<Vec<char>>()
             .chunks(2)
-            .map(|c| c.iter().collect::<String>())
-            .collect::<Vec<String>>();
+            .map(|c| c.iter().collect::<String>().into())
+            .collect::<Vec<_>>();
 
         Ok(Self {time, satellite_ids})
     }
