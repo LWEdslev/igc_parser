@@ -7,9 +7,9 @@ type Seconds = u32;
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Clone, Debug)]
 pub struct Time {
-    h: u8,
-    m: u8,
-    s: u8,
+    pub h: u8,
+    pub m: u8,
+    pub s: u8,
 }
 
 impl Time {
