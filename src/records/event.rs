@@ -37,6 +37,10 @@ mod tests {
         assert_eq!(event.extension, "".to_string().into());
         assert_eq!(event.event_type, "PEV".to_string().into());
         assert!(event.is_pev());
+
+        let event = Event::parse("E160245LXAHRS").unwrap();
+
+        assert!(!event.is_pev());
     }
 }
 

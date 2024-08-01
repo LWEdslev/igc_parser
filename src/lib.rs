@@ -24,7 +24,10 @@
 //! println!("{}", valid_fixes.len())
 //! ```
 
-use std::{rc::Rc, sync::Arc};
+use std::rc::Rc;
+
+#[cfg(feature = "thread-safe")]
+use std::sync::Arc;
 
 use crate::error::IGCError;
 

@@ -45,9 +45,16 @@ mod tests {
     use super::*;
 
     #[test]
-    fn diff_gps_should_be_correct() {
+    fn diff_gps() {
         let diff_gps = DiffGPS::parse("D21234").unwrap();
         assert_eq!(diff_gps.dgps_station_id, 1234);
         assert_eq!(diff_gps.qualifier, DiffGPSQualifier::DGPS);
+
+        let diff_gps = DiffGPS::parse("D11234").unwrap();
+        assert_eq!(diff_gps.qualifier, DiffGPSQualifier::GPS);
+
+        assert!(DiffGPS::parse("DA1234").is_err());
+        assert!(DiffGPS::parse("D31234").is_err());
+        assert!(DiffGPS::parse("D112A4").is_err());
     }
 }

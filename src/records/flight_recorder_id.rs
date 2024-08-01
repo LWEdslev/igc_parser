@@ -34,4 +34,9 @@ mod tests {
         assert_eq!(frid.id, "NNN".into());
         assert_eq!(frid.extension, "TEXTSTRING".into());
     }
+
+    #[test]
+    fn fr_id_too_short() {
+        assert!(FlightRecorderID::parse("AMMMNN").is_err())
+    }
 }

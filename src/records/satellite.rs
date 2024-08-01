@@ -36,4 +36,9 @@ mod tests {
         assert_eq!(sat_record.time, Time::from_hms(16, 2, 40).unwrap());
         assert_eq!(sat_record.satellite_ids.len(), 9);
     }
+
+    #[test]
+    fn too_short() {
+        assert!(Satellite::parse("F160").is_err())
+    }
 }

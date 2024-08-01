@@ -76,6 +76,12 @@ mod tests {
     }
 
     #[test]
+    fn declaration_too_short() {
+        assert!(TaskInfo::parse("C070323213339000000000").is_err());
+        assert!(TaskInfo::parse("C0703232133390").is_err())
+    }
+
+    #[test]
     fn task_point_parsed_correctly() {
         if let Ok(TaskInfo::TaskPoint(task_point)) = TaskInfo::parse("C3835269S17609420ETASA Taupo Start A") {
             assert_eq!(task_point.coordinate.latitude, Latitude {

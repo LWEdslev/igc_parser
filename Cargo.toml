@@ -7,7 +7,6 @@ description = "A high-level parsing/deserializing crate for IGC flight recorder 
 repository = "https://github.com/LWEdslev/igc_parser"
 
 [dependencies]
-paste = "1.0.15"
 serde = { version = "1.0.192", features = ["derive", "rc"], optional = true }
 thiserror = "1.0.50"
 

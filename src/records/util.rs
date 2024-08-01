@@ -42,10 +42,9 @@ impl Time {
         3600 * (self.h as u32) + 60 * (self.m as u32) + (self.s as u32)
     }
 
-    pub fn add_hours(&mut self, h: u8) -> Result<()> {
-        if self.h + h > 23 { return Err(TimeInitError(format!("tried to add {} hours with {}", self.h, h)))}
+    pub fn add_hours(&mut self, h: u8) {
         self.h += h;
-        Ok(())
+        self.h %= 24;
     }
 }
 
@@ -59,10 +58,10 @@ pub struct Date {
 
 impl Date {
     pub fn parse(line: &str) -> Result<Self> {
-        if line.len() != 6 { return Err(DateInitError(format!("'{}' is not the correct length for a date", line)))}
+        if line.len() != 6 { return Err(DateInitError(format!("'{}' is not the correct length for a date", line))) }
         match (line[0..2].parse::<u8>(), line[2..4].parse::<u8>(), line[4..6].parse::<u8>()) {
             (Ok(d), Ok(m), Ok(y)) => {
-                if (1u8..31).contains(&d) && (1u8..12).contains(&m) {
+                if (1u8..=31).contains(&d) && (1u8..=12).contains(&m) {
                     Ok(Self {d, m, y})
                 } else {
                     Err(DateInitError(format!("{}/{}-{} is not a valid date", d, m, y)))
@@ -145,5 +144,102 @@ impl Longitude {
             minutes,
             is_east,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn from_seconds_since_midnight() {
+        let time = Time::from_seconds_since_midnight(0).unwrap();
+        assert_eq!(time, Time { h: 0, m: 0, s: 0 });
+
+        let time = Time::from_seconds_since_midnight(3600).unwrap();
+        assert_eq!(time, Time { h: 1, m: 0, s: 0 });
+
+        let time = Time::from_seconds_since_midnight(3661).unwrap();
+        assert_eq!(time, Time { h: 1, m: 1, s: 1 });
+
+        let time = Time::from_seconds_since_midnight(86399).unwrap();
+        assert_eq!(time, Time { h: 23, m: 59, s: 59 });
+
+        assert!(Time::from_seconds_since_midnight(86400).is_err());
+
+        let time = Time::from_seconds_since_midnight(45296).unwrap();
+        assert_eq!(time, Time { h: 12, m: 34, s: 56 });
+    }
+
+    #[test]
+    fn seconds_since_midnight() {
+        let time = Time { h: 0, m: 0, s: 0 };
+        assert_eq!(time.seconds_since_midnight(), 0);
+
+        let time = Time { h: 1, m: 0, s: 0 };
+        assert_eq!(time.seconds_since_midnight(), 3600);
+
+        let time = Time { h: 1, m: 1, s: 1 };
+        assert_eq!(time.seconds_since_midnight(), 3661);
+
+        let time = Time { h: 23, m: 59, s: 59 };
+        assert_eq!(time.seconds_since_midnight(), 86399);
+    }
+
+    #[test]
+    fn from_hms() {
+        let time = Time::from_hms(0, 0, 0).unwrap();
+        assert_eq!(time, Time { h: 0, m: 0, s: 0 });
+
+        let time = Time::from_hms(1, 0, 0).unwrap();
+        assert_eq!(time, Time { h: 1, m: 0, s: 0 });
+
+        let time = Time::from_hms(1, 1, 1).unwrap();
+        assert_eq!(time, Time { h: 1, m: 1, s: 1 });
+
+        let time = Time::from_hms(23, 59, 59).unwrap();
+        assert_eq!(time, Time { h: 23, m: 59, s: 59 });
+
+        assert!(Time::from_hms(24, 0, 0).is_err());
+        assert!(Time::from_hms(0, 60, 0).is_err());
+        assert!(Time::from_hms(0, 0, 60).is_err());
+    }
+
+    #[test]
+    fn add_hours() {
+        let mut time = Time { h: 0, m: 0, s: 0 };
+        time.add_hours(1);
+        assert_eq!(time, Time { h: 1, m: 0, s: 0 });
+
+        let mut time = Time { h: 1, m: 0, s: 0 };
+        time.add_hours(1);
+        assert_eq!(time, Time { h: 2, m: 0, s: 0 });
+
+        let mut time = Time { h: 23, m: 59, s: 59 };
+        time.add_hours(1);
+        assert_eq!(time, Time { h: 0, m: 59, s: 59 });
+
+        let mut time = Time { h: 23, m: 59, s: 59 };
+        time.add_hours(2);
+        assert_eq!(time, Time { h: 1, m: 59, s: 59 });
+
+        let mut time = Time { h: 23, m: 59, s: 59 };
+        time.add_hours(24);
+        assert_eq!(time, Time { h: 23, m: 59, s: 59 });
+    }
+
+    #[test]
+    fn date() {
+        let date = Date::parse("010203").unwrap();
+        assert_eq!(date, Date { d: 1, m: 2, y: 3 });
+
+        let date = Date::parse("311212").unwrap();
+        assert_eq!(date, Date { d: 31, m: 12, y: 12 });
+
+        assert!(Date::parse("000000").is_err());
+        assert!(Date::parse("320000").is_err());
+        assert!(Date::parse("123123").is_err());
+        assert!(Date::parse("003200").is_err());
+        assert!(Date::parse("0102A3").is_err());
     }
 }

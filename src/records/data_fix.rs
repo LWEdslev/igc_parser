@@ -19,3 +19,20 @@ impl DataFix {
         Ok(Self {time, content})
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn data_fix_parsed_correctly() {
+        let data_fix = DataFix::parse("F160240Hello, world!").unwrap();
+        assert_eq!(data_fix.time, Time::from_hms(16, 2, 40).unwrap());
+        assert_eq!(data_fix.content, "Hello, world!".to_string().into());
+    }
+
+    #[test]
+    fn too_short() {
+        assert!(DataFix::parse("F160").is_err())
+    }
+}

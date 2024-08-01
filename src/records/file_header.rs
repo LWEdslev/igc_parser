@@ -95,3 +95,28 @@ impl FileHeader {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+
+    #[test]
+    fn get_file_header_with_string_content_test() {
+        let line = "HFPLTPILOTINCHARGE:John Doe";
+        let header_name = "HFPLTPILOTINCHARGE:";
+        let result = get_file_header_with_string_content(line, header_name);
+        assert_eq!(result.unwrap(), "John Doe");
+
+        // too short
+        let line = "HFPLTPILOTINCHARGE";
+        let header_name = "HFPLTPILOTINCHARGE:";
+        let result = get_file_header_with_string_content(line, header_name);
+        assert!(result.is_err());
+
+        let line = "HFFXA1AB";
+        assert!(FileHeader::parse(line).is_err());
+        let line = "HABCD123";
+        assert!(FileHeader::parse(line).is_err());
+    }
+}

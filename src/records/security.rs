@@ -26,4 +26,9 @@ mod tests {
         let sec = Security::parse("GREJNGJERJKNJKRE31895478537H43982FJN9248F942389T433T").unwrap();
         assert_eq!(sec.security_code, "REJNGJERJKNJKRE31895478537H43982FJN9248F942389T433T".to_string().into())
     }
+
+    #[test]
+    fn too_short() {
+        assert!(Security::parse("G").is_err())
+    }
 }

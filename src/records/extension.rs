@@ -6,7 +6,7 @@ use crate::Result;
 
 
 #[cfg_attr(feature = "serde", derive(Deserialize, Serialize))]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum ExtensionType {I, J}
 
 
@@ -21,8 +21,8 @@ pub struct Extension {
 impl Extension {
     pub(crate) fn parse(line: &str) -> Result<Self> {
         let extension_type = match &line[0..1] {
-            "I" => {ExtensionType::I},
-            "J" => {ExtensionType::J},
+            "I" => ExtensionType::I,
+            "J" => ExtensionType::J,
             _ => return Err(ExtensionInitError(format!("'{line}' does not start with a valid prefix for an extension")))
         };
         if line.len() < 3 { return Err(ExtensionInitError(format!("'{line}' is too short to be parsed as a fix extension")))}
@@ -43,12 +43,39 @@ impl Extension {
             return Err(ExtensionInitError(format!("'{line}' has invalid start/end characters")))
         }
         let extensions = extensions.into_iter().map(|(start, end, s)| {
-            match (start, end) {
-                (Ok(start), Ok(end)) => (start, end, s.into()),
-                _ => unreachable!(),
-            }
+            (start.unwrap(), end.unwrap(), s.into())
         }).collect::<Vec<_>>();
 
         Ok(Self {extension_type, number_of_extensions, extensions})
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn extension_test() {
+        let s = "I023638FXA3940SIU";
+        let extension = Extension::parse(s).unwrap();
+        assert_eq!(extension.extension_type, ExtensionType::I);
+        assert_eq!(extension.number_of_extensions, 2);
+        assert_eq!(extension.extensions, vec![(36, 38, "FXA".into()), (39, 40, "SIU".into())]);
+
+        // negative, too short
+        let s = "I0";
+        assert!(Extension::parse(s).is_err());
+
+        // negative, valid start, invalid end
+        let s = "I0236A8FXA3940SIU";
+        assert!(Extension::parse(s).is_err());
+
+        // negative, invalid start, valid end
+        let s = "I0A3638FXA3940SIU";
+        assert!(Extension::parse(s).is_err());
+
+        // negative
+        let s = "A0A3638FXA3940SIU";
+        assert!(Extension::parse(s).is_err());
+    }
+}
+        

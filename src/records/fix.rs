@@ -91,4 +91,23 @@ mod tests {
             assert!(false)
         }
     }
+
+    #[test]
+    fn fix_too_short() {
+        assert!(Fix::parse("B0941395152202N00032723WA001140015").is_err())
+    }
+
+    #[test]
+    fn negative() {
+        let line = "A0941395152202N00032723WA001140015000854106968064092190039002770100";
+        assert!(Fix::parse(line).is_err());
+        let line = "B0941395152202N00032723WA0A1140015000854106968064092190039002770100";
+        assert!(Fix::parse(line).is_err());
+        let line = "B0941395152202N00032723WA011140A15000854106968064092190039002770100";
+        assert!(Fix::parse(line).is_err());
+        let line = "B0941395152202N00032723WV001140015000854106968064092190039002770100";
+        assert!(Fix::parse(line).is_ok());
+        let line = "B0941395152202N00032723WB001140015000854106968064092190039002770100";
+        assert!(Fix::parse(line).is_err());
+    }
 }
