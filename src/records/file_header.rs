@@ -31,9 +31,19 @@ impl FileHeader {
     pub(crate) fn parse(line: &str) -> Result<Self> {
         match &line[0..5] {
             "HFDTE" => {
-                if line.len() != 11 { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header date"))) };
-                let date = Date::parse(&line[5..11])?;
-                Ok(FileHeader::Date(date))
+                if line.len() != 11 { 
+                    match &line[5..10]{
+                        "DATE:" =>
+                        { 
+                            let date = Date::parse(&line[10..16])?;
+                            Ok(FileHeader::Date(date))
+                        }
+                        _ => return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header date"))) 
+                    }
+                } else {
+                    let date = Date::parse(&line[5..11])?;
+                    Ok(FileHeader::Date(date))
+                }
             },
             "HFFXA" => {
                 if line.len() != 8 { return Err(FileHeaderInitError(format!("'{line}' does not have the correct length to be parsed as a file header fix accuracy"))) };
